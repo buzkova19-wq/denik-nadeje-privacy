@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#dff8f3" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Deník naděje" />
+<link rel="apple-touch-icon" href="icon-180.png" />
+<meta name="color-scheme" content="light" />
+<title>Deník naděje</title>
+<link rel="icon" type="image/png" href="icon.png" />
+<link rel="manifest" href="manifest.json" />
+<style>
+:root{
+  color-scheme: light;
+  --turq:#159e9b; --turq2:#37b8b2; --ink:#23323a; --muted:#6e7f86;
+  --card:rgba(255,255,255,.84); --line:rgba(35,50,58,.10); --shadow:0 14px 40px rgba(55,93,102,.12);
+  --lav:#ebe4ff; --mint:#dff7f1; --peach:#ffe9de; --sky:#e1f3ff; --rose:#fce7f1;
+  --danger:#b84f5d; --ok:#2f8f73;
+  --radius:24px; --font: ui-rounded, "Avenir Next", "Segoe UI", "Trebuchet MS", system-ui, -apple-system, sans-serif;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth;background:#f7fffd;color-scheme:light} body{margin:0;font-family:var(--font);color:var(--ink);min-height:100vh;
+background:
+radial-gradient(circle at 10% 10%, rgba(216,248,241,.95), transparent 30%),
+radial-gradient(circle at 90% 8%, rgba(236,227,255,.9), transparent 28%),
+radial-gradient(circle at 80% 75%, rgba(255,232,219,.76), transparent 30%),
+linear-gradient(160deg,#f5fffc 0%,#f6f3ff 46%,#fff9f4 100%);}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.34;background-image:linear-gradient(rgba(255,255,255,.2) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.2) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(to bottom,black,transparent 70%)}
+button,input,textarea,select{font:inherit;color-scheme:light} button{cursor:pointer} a{color:inherit}
+.app{max-width:760px;margin:auto;min-height:100vh;padding-bottom:104px}.topbar{position:sticky;top:0;z-index:25;padding:18px 18px 12px;background:linear-gradient(to bottom,rgba(247,253,252,.94),rgba(247,253,252,.72),transparent);backdrop-filter:blur(14px)}
+.headrow{display:flex;align-items:center;justify-content:space-between;gap:14px}.eyebrow{text-transform:uppercase;letter-spacing:.12em;color:#76868b;font-size:.75rem;font-weight:800}.brand{margin:2px 0 0;font-size:clamp(2rem,8vw,3rem);line-height:1;font-weight:900;letter-spacing:-.04em;color:var(--turq);text-shadow:0 2px 0 rgba(255,255,255,.85)}
+.iconbtn{border:1px solid rgba(255,255,255,.86);background:rgba(255,255,255,.84);width:48px;height:48px;border-radius:18px;box-shadow:var(--shadow);font-size:1.2rem;color:var(--ink)}
+main{padding:0 16px}.view{display:none;animation:fade .22s ease}.view.active{display:block}@keyframes fade{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hero{margin:10px 0 16px;padding:22px;border-radius:30px;background:linear-gradient(135deg,rgba(221,249,241,.95),rgba(235,227,255,.88) 52%,rgba(255,235,224,.88));box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.82)}
+.hero h2{margin:0 0 6px;font-size:1.42rem}.hero p{margin:0;color:var(--muted);line-height:1.5}.minirow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.mini{padding:11px 8px;border-radius:18px;background:rgba(255,255,255,.72);text-align:center}.mini b{display:block;font-size:1.15rem}.mini span{font-size:.72rem;color:var(--muted)}
+.card{background:var(--card);border:1px solid rgba(255,255,255,.86);box-shadow:var(--shadow);backdrop-filter:blur(13px);border-radius:var(--radius);padding:18px;margin:12px 0}.card h3{margin:0 0 5px;font-size:1.12rem}.card .sub{margin:0 0 15px;color:var(--muted);font-size:.9rem;line-height:1.45}.sectionTitle{display:flex;align-items:end;justify-content:space-between;margin:22px 4px 10px}.sectionTitle h2{margin:0;font-size:1.52rem;letter-spacing:-.03em}.sectionTitle span{font-size:.82rem;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.field{margin:12px 0}.field label{display:block;font-weight:800;font-size:.88rem;margin:0 0 7px}.field small{color:var(--muted)}
+input[type=text],input[type=number],input[type=date],input[type=time],input[type=datetime-local],textarea,select{width:100%;border:1px solid var(--line);background:rgba(255,255,255,.9);color:var(--ink);padding:12px 13px;border-radius:15px;outline:none}.field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(21,158,155,.45);box-shadow:0 0 0 3px rgba(21,158,155,.08)} textarea{min-height:92px;resize:vertical}
+.rangeLine{display:grid;grid-template-columns:120px 1fr 42px;gap:10px;align-items:center;margin:12px 0}.rangeLine label{font-weight:800;font-size:.88rem}.rangeVal{height:36px;display:grid;place-items:center;background:var(--mint);border-radius:12px;font-weight:900;color:#247a75}input[type=range]{width:100%;accent-color:var(--turq)}
+.btn{border:0;border-radius:15px;padding:12px 15px;font-weight:900}.primary{background:linear-gradient(135deg,var(--turq2),var(--turq));color:white;box-shadow:0 10px 22px rgba(21,158,155,.23)}.soft{background:rgba(223,247,241,.9);color:#247a75}.lav{background:rgba(235,228,255,.92);color:#68558a}.ghost{background:rgba(255,255,255,.75);border:1px solid var(--line);color:var(--ink)}.danger{background:#fff0f2;color:var(--danger)}.full{width:100%}.btnrow{display:flex;gap:9px;flex-wrap:wrap}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:7px 10px;font-size:.78rem;font-weight:900;background:var(--mint);color:#2f7d78}.pill.purple{background:var(--lav);color:#6f5d91}.pill.peach{background:var(--peach);color:#94634b}
+.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 4px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab{white-space:nowrap;border:0;border-radius:999px;padding:9px 12px;background:rgba(255,255,255,.68);color:var(--muted);font-weight:800}.tab.active{background:var(--turq);color:white}
+.list{display:grid;gap:9px}.item{border:1px solid var(--line);background:rgba(255,255,255,.77);border-radius:18px;padding:13px}.itemTop{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.item h4{margin:0 0 4px}.item p{margin:4px 0;color:var(--muted);line-height:1.4}.meta{font-size:.78rem;color:var(--muted)}.itemActions{display:flex;gap:6px;margin-top:9px;flex-wrap:wrap}.tiny{border:0;padding:7px 9px;border-radius:10px;background:#f0f5f5;color:#52646a;font-size:.76rem;font-weight:900}.tiny.done{background:var(--mint);color:var(--ok)}.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed rgba(35,50,58,.15);border-radius:18px;background:rgba(255,255,255,.38)}
+.chartWrap{height:220px;background:rgba(255,255,255,.62);border-radius:18px;padding:10px;border:1px solid var(--line)}canvas{width:100%;height:100%}
+.summaryBox{white-space:pre-wrap;background:linear-gradient(145deg,#f8fffd,#f8f5ff);border:1px solid var(--line);border-radius:18px;padding:14px;line-height:1.55;min-height:100px}.note{font-size:.8rem;color:var(--muted);line-height:1.45}.warning{background:#fff8ec;border:1px solid #f3dec1;color:#7c603c;border-radius:16px;padding:12px;font-size:.82rem;line-height:1.45}.success{background:#effbf6;color:#2f7a62;border-radius:16px;padding:12px;font-size:.85rem}
+.premiumHero{background:linear-gradient(135deg,#dff8f1 0%,#eee7ff 48%,#ffe8da 100%);border-radius:30px;padding:24px;box-shadow:var(--shadow);margin-top:10px}.premiumHero h2{font-size:1.8rem;margin:0 0 6px}.pricegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.price{background:rgba(255,255,255,.78);border:1px solid rgba(255,255,255,.92);border-radius:20px;padding:15px}.price.featured{outline:2px solid rgba(21,158,155,.45)}.price b{font-size:1.4rem}.price small{display:block;color:var(--muted);margin-top:3px}
+.bottom{position:fixed;z-index:30;left:50%;bottom:0;transform:translateX(-50%);width:min(760px,100%);padding:9px 10px calc(9px + env(safe-area-inset-bottom));background:rgba(255,255,255,.9);backdrop-filter:blur(18px);border-top:1px solid var(--line)}.nav{display:grid;grid-template-columns:repeat(6,1fr);gap:3px}.navbtn{border:0;background:transparent;color:#75838a;padding:8px 2px;border-radius:16px;font-size:.61rem;font-weight:800;min-width:0}.navbtn .ico{display:block;font-size:1.18rem;margin-bottom:3px}.navbtn.active{background:linear-gradient(135deg,#e0f7f1,#eee6ff);color:#54716f}
+.modalBack{display:none;position:fixed;z-index:60;inset:0;background:rgba(22,36,42,.3);backdrop-filter:blur(6px);padding:18px;align-items:flex-end;justify-content:center}.modalBack.show{display:flex}.modal{width:min(720px,100%);max-height:86vh;overflow:auto;background:#fbfefd;border-radius:28px 28px 20px 20px;padding:20px;box-shadow:0 -10px 50px rgba(22,36,42,.22)}.modalHead{display:flex;justify-content:space-between;align-items:center}.modalHead h2{margin:0}.close{border:0;background:#eef4f4;width:40px;height:40px;border-radius:14px;font-size:1.2rem}.sep{height:1px;background:var(--line);margin:16px 0}.switchrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0}.switch{width:48px;height:28px;border-radius:999px;background:#d7e2e2;position:relative;border:0}.switch::after{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;background:white;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,.16);transition:.2s}.switch.on{background:var(--turq2)}.switch.on::after{left:23px}
+.filePreview{display:flex;gap:10px;align-items:center}.filePreview img{width:78px;height:78px;object-fit:cover;border-radius:14px;border:1px solid var(--line)}
+@media(max-width:520px){.minirow{grid-template-columns:repeat(2,1fr)}.grid2,.grid3,.pricegrid{grid-template-columns:1fr}.rangeLine{grid-template-columns:92px 1fr 38px}.card{padding:15px}.brand{font-size:2.35rem}.hero{padding:18px}.navbtn{font-size:.56rem}}
+
+.healthGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}.healthStat{background:linear-gradient(145deg,#ffffff,#f3fffb);border:1px solid var(--line);border-radius:18px;padding:14px}.healthStat b{display:block;font-size:1.25rem;color:#247a75}.healthStat span{font-size:.78rem;color:var(--muted)}
+.contactCard{border-left:4px solid rgba(21,158,155,.55)}.contactLinks{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.contactLinks a{text-decoration:none}.connectCard{background:linear-gradient(135deg,#e7fbf6,#f1edff 55%,#fff2e8)}
+@media(max-width:680px){.healthGrid{grid-template-columns:1fr 1fr}}
+@media (prefers-color-scheme: dark){html,body{background:#f7fffd!important;color:#23323a!important}.card,.item,.mini,.price,.modal,.chartWrap,.summaryBox,input,textarea,select{background-color:rgba(255,255,255,.94)!important;color:#23323a!important}.bottom{background:rgba(255,255,255,.94)!important}.topbar{background:linear-gradient(to bottom,rgba(247,253,252,.98),rgba(247,253,252,.82),transparent)!important}}
+
+.relaxHero{background:linear-gradient(135deg,#e2faf4 0%,#eee8ff 48%,#fff0e7 100%);border-radius:30px;padding:22px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.9);margin:10px 0 16px}.relaxHero h2{margin:0 0 6px;font-size:1.55rem}.relaxHero p{margin:0;color:var(--muted);line-height:1.55}
+.relaxGrid{display:grid;gap:12px}.relaxTrack{position:relative;overflow:hidden;border:1px solid var(--line);background:rgba(255,255,255,.82);border-radius:22px;padding:16px}.relaxTrack::after{content:"";position:absolute;width:110px;height:110px;border-radius:50%;right:-38px;top:-42px;background:radial-gradient(circle,rgba(55,184,178,.18),rgba(235,228,255,.06) 68%,transparent 70%);pointer-events:none}.relaxTrack h3{margin:0 0 4px}.relaxTrack p{margin:4px 0 12px;color:var(--muted);line-height:1.45}.relaxMeta{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 13px}.relaxPlayer{display:none;background:linear-gradient(145deg,#f8fffd,#f7f3ff);border:1px solid var(--line);border-radius:24px;padding:18px;text-align:center}.relaxPlayer.show{display:block}.relaxOrb{width:116px;height:116px;margin:8px auto 14px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#ffffff 0 13%,#b9eee4 34%,#cfc5f4 67%,#f6d8cf 100%);box-shadow:0 14px 34px rgba(80,126,132,.18);font-size:2rem;animation:relaxBreathe 8s ease-in-out infinite}.relaxOrb.paused{animation-play-state:paused}@keyframes relaxBreathe{0%,100%{transform:scale(.88);opacity:.86}50%{transform:scale(1.06);opacity:1}}.relaxTimer{font-size:2rem;font-weight:900;color:var(--turq);letter-spacing:.03em}.relaxNow{font-weight:900;font-size:1.12rem;margin-top:4px}.relaxGuide{max-width:520px;margin:8px auto 14px;color:var(--muted);line-height:1.5}.volumeRow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin:14px 0}.volumeRow input{accent-color:var(--turq)}
+
+@media print{body{background:white}.topbar,.bottom,.noPrint,.btn,.tabs{display:none!important}.app{max-width:none;padding:0}.view{display:none!important}.view#printView{display:block!important}.card{box-shadow:none;border:1px solid #ddd;background:white}.printOnly{display:block!important}}
+
+.customAudioBox{margin-top:12px;padding:14px;border:1px dashed rgba(21,158,155,.28);border-radius:18px;background:linear-gradient(145deg,rgba(223,247,241,.58),rgba(235,228,255,.48))}.customAudioBox audio{width:100%;margin-top:10px;accent-color:var(--turq)}.customFileName{font-weight:900;color:#247a75;overflow-wrap:anywhere}.sourceNote{font-size:.72rem;color:var(--muted);line-height:1.45;margin-top:12px}.sourceNote a{text-decoration:underline;text-underline-offset:2px}
+</style>
+<!-- iOS/PWA build v1 -->
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="headrow">
+    <div><div class="eyebrow">Můj průvodce léčbou</div><h1 class="brand">Deník naděje</h1></div>
+    <button class="iconbtn" id="settingsBtn" aria-label="Nastavení">⚙︎</button>
+  </div>
+</header>
+<main>
+<section class="view active" id="view-home">
+  <div class="hero">
+    <h2 id="hello">Dobrý den</h2>
+    <p>Rychlý přehled dne, příznaků a toho, co chcete mít připravené pro lékaře.</p>
+    <div class="minirow">
+      <div class="mini"><b id="statPain">–</b><span>bolest</span></div>
+      <div class="mini"><b id="statFatigue">–</b><span>únava</span></div>
+      <div class="mini"><b id="statMood">–</b><span>nálada</span></div>
+      <div class="mini"><b id="statNext">–</b><span>další termín</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Dnešní zápis</h3><p class="sub">Stačí pár čísel a krátká poznámka. Hodnoty jsou orientační, nejsou diagnózou.</p>
+    <div class="rangeLine"><label>Bolest</label><input id="pain" type="range" min="0" max="10" value="0"><div class="rangeVal" id="painVal">0</div></div>
+    <div class="rangeLine"><label>Únava</label><input id="fatigue" type="range" min="0" max="10" value="0"><div class="rangeVal" id="fatigueVal">0</div></div>
+    <div class="rangeLine"><label>Nevolnost</label><input id="nausea" type="range" min="0" max="10" value="0"><div class="rangeVal" id="nauseaVal">0</div></div>
+    <div class="rangeLine"><label>Nálada</label><input id="mood" type="range" min="0" max="10" value="5"><div class="rangeVal" id="moodVal">5</div></div>
+    <div class="rangeLine"><label>Chuť k jídlu</label><input id="appetite" type="range" min="0" max="10" value="5"><div class="rangeVal" id="appetiteVal">5</div></div>
+    <div class="rangeLine"><label>Spánek</label><input id="sleep" type="range" min="0" max="10" value="5"><div class="rangeVal" id="sleepVal">5</div></div>
+    <div class="grid2">
+      <div class="field"><label>Teplota (°C)</label><input id="temperature" type="number" step="0.1" min="30" max="45" placeholder="např. 36,7"></div>
+      <div class="field"><label>Datum</label><input id="entryDate" type="date"></div>
+    </div>
+    <div class="field"><label>Jak mi dnes je?</label><textarea id="note" placeholder="Bolest, vedlejší účinky, co se změnilo…"></textarea></div>
+    <div class="field"><label>Moje malá výhra</label><input id="win" type="text" placeholder="Např. zvládla jsem procházku, dobře jsem se najedla…"></div>
+    <div class="field"><label>Fotka k zápisu <small>(volitelné)</small></label><input id="entryPhoto" type="file" accept="image/*"><div id="photoInfo" class="note"></div></div>
+    <button class="btn primary full" id="saveEntry">Uložit dnešní zápis</button>
+  </div>
+
+
+  <div class="card connectCard">
+    <div class="itemTop"><div><h3>Zdravotní data</h3><p class="sub">Tep, krevní tlak, SpO₂, váha, kroky, spánek, tělesná teplota a glykémie. Teď je můžete zapisovat ručně; v Android verzi půjde podporovaná data načítat přes Health Connect.</p></div><span class="pill purple" id="healthConnectStatus">Health Connect: nepřipojeno</span></div>
+    <div class="healthGrid">
+      <div class="healthStat"><b id="latestPulse">–</b><span>tep / min</span></div>
+      <div class="healthStat"><b id="latestBp">–</b><span>krevní tlak</span></div>
+      <div class="healthStat"><b id="latestSpo2">–</b><span>SpO₂ %</span></div>
+      <div class="healthStat"><b id="latestWeight">–</b><span>váha kg</span></div>
+      <div class="healthStat"><b id="latestSteps">–</b><span>kroky</span></div>
+      <div class="healthStat"><b id="latestSleep">–</b><span>spánek h</span></div>
+      <div class="healthStat"><b id="latestBodyTemp">–</b><span>teplota °C</span></div>
+      <div class="healthStat"><b id="latestGlucose">–</b><span>glykémie mmol/l</span></div>
+    </div>
+    <div class="grid3">
+      <div class="field"><label>Tep</label><input id="vitalPulse" type="number" min="20" max="250" placeholder="např. 78"></div>
+      <div class="field"><label>Tlak syst.</label><input id="vitalSys" type="number" min="50" max="260" placeholder="120"></div>
+      <div class="field"><label>Tlak diast.</label><input id="vitalDia" type="number" min="30" max="180" placeholder="80"></div>
+    </div>
+    <div class="grid3">
+      <div class="field"><label>SpO₂ (%)</label><input id="vitalSpo2" type="number" min="50" max="100" step="1" placeholder="98"></div>
+      <div class="field"><label>Tělesná teplota (°C)</label><input id="vitalBodyTemp" type="number" min="30" max="45" step="0.1" placeholder="36,7"></div>
+      <div class="field"><label>Glykémie (mmol/l)</label><input id="vitalGlucose" type="number" min="0.5" max="50" step="0.1" placeholder="5,6"></div>
+    </div>
+    <div class="grid3">
+      <div class="field"><label>Váha (kg)</label><input id="vitalWeight" type="number" min="1" max="500" step="0.1" placeholder="např. 72,5"></div>
+      <div class="field"><label>Kroky</label><input id="vitalSteps" type="number" min="0" max="200000" step="1" placeholder="např. 4200"></div>
+      <div class="field"><label>Spánek (hodiny)</label><input id="vitalSleep" type="number" min="0" max="24" step="0.1" placeholder="např. 7,5"></div>
+    </div>
+    <div class="field"><label>Datum a čas</label><input id="vitalDate" type="datetime-local"></div>
+    <div class="btnrow"><button class="btn primary" id="saveVital">Uložit zdravotní data</button><button class="btn lav" id="healthConnectBtn">Jak propojení funguje</button></div>
+    <div class="note" style="margin-top:10px">Přímé čtení z Health Connect nelze spustit v tomto HTML prototypu. V nativní Android verzi se zapne až po výslovném souhlasu uživatele a schválení potřebných oprávnění. Dostupnost jednotlivých hodnot závisí na hodinkách a aplikaci, která je do Health Connect zapisuje.</div><div class="sep"></div><h3>Poslední měření</h3><div class="list" id="vitalList"></div>
+  </div>
+
+  <div class="card">
+    <div class="itemTop"><div><h3>Co je nejblíž</h3><p class="sub">Termíny, které máte před sebou.</p></div><span class="pill" id="upcomingCount">0 termínů</span></div>
+    <div class="list" id="homeUpcoming"></div>
+  </div>
+</section>
+
+<section class="view" id="view-diary">
+  <div class="sectionTitle"><div><h2>Deník</h2><span>Historie příznaků a poznámek</span></div><button class="btn soft noPrint" id="printDiary">PDF / tisk</button></div>
+  <div class="card">
+    <div class="tabs" id="chartTabs"><button class="tab active" data-days="7">7 dní</button><button class="tab" data-days="14">14 dní</button><button class="tab" data-days="30">30 dní ★</button></div>
+    <div class="chartWrap"><canvas id="chart" width="700" height="240"></canvas></div>
+    <div class="note" style="margin-top:9px">Graf zobrazuje bolest, únavu, nevolnost a náladu. 30 dní je Premium funkce; demo Premium lze zapnout na kartě Premium.</div>
+  </div>
+  <div class="card"><div class="itemTop"><div><h3>Zápisy</h3><p class="sub">Nejnovější jsou nahoře.</p></div><button class="btn ghost noPrint" id="exportData">Záloha JSON</button></div><div class="list" id="entryList"></div></div>
+</section>
+
+<section class="view" id="view-treatment">
+  <div class="sectionTitle"><div><h2>Léčba</h2><span>Termíny, léky a výsledky</span></div></div>
+  <div class="tabs" id="treatTabs"><button class="tab active" data-panel="appointments">Termíny</button><button class="tab" data-panel="meds">Léky</button><button class="tab" data-panel="results">Zprávy & dokumenty</button></div>
+
+  <div id="panel-appointments" class="treatPanel">
+    <div class="card"><h3>Přidat termín</h3><div class="grid2"><div class="field"><label>Typ</label><select id="apptType"><option>Kontrola</option><option>Chemoterapie / léčba</option><option>Odběr krve</option><option>CT / PET / MR</option><option>Radioterapie</option><option>Jiné</option></select></div><div class="field"><label>Datum a čas</label><input id="apptDate" type="datetime-local"></div></div><div class="field"><label>Místo / pracoviště</label><input id="apptPlace" type="text" placeholder="Např. hematologie"></div><div class="field"><label>Poznámka</label><textarea id="apptNote" placeholder="Co vzít s sebou, nalačno, otázky…"></textarea></div><button class="btn primary full" id="addAppt">Přidat termín</button></div>
+    <div class="card"><h3>Nadcházející termíny</h3><div class="list" id="apptList"></div></div>
+  </div>
+
+  <div id="panel-meds" class="treatPanel" style="display:none">
+    <div class="card"><h3>Přidat lék</h3><div class="grid2"><div class="field"><label>Název léku</label><input id="medName" type="text" placeholder="Např. …"></div><div class="field"><label>Dávka</label><input id="medDose" type="text" placeholder="Např. 1 tableta"></div></div><div class="grid2"><div class="field"><label>Časy</label><input id="medTimes" type="text" placeholder="08:00, 20:00"></div><div class="field"><label>Režim</label><select id="medMode"><option>Pravidelně</option><option>SOS / dle potřeby</option><option>Dočasně</option></select></div></div><div class="field"><label>Poznámka</label><input id="medNote" type="text" placeholder="S jídlem, před spaním…"></div><button class="btn primary full" id="addMed">Přidat lék</button></div>
+    <div class="card"><div class="itemTop"><div><h3>Moje léky</h3><p class="sub">U pravidelných léků lze označit dnešní dávku jako užitou.</p></div><button class="btn ghost" id="requestNotify">Povolit upozornění</button></div><div class="list" id="medList"></div><div class="note" style="margin-top:10px">V této webové verzi se systémová upozornění spolehlivě zobrazují jen při otevřené aplikaci. Nativní mobilní verze může používat plnohodnotné notifikace.</div></div>
+  </div>
+
+  <div id="panel-results" class="treatPanel" style="display:none">
+    <div class="card">
+      <div class="itemTop"><div><h3>Lékařské zprávy a dokumenty</h3><p class="sub">Mějte zprávy, výsledky a dokumenty z léčby na jednom místě.</p></div><span class="pill" id="resultLimitPill">0 / 5 zdarma</span></div>
+      <div id="resultLimitInfo" class="success" style="margin:12px 0">Ve verzi zdarma můžete uložit až 5 zpráv nebo dokumentů. Premium odemyká neomezený počet.</div>
+      <div class="grid2"><div class="field"><label>Datum</label><input id="resultDate" type="date"></div><div class="field"><label>Název zprávy</label><input id="resultName" type="text" placeholder="Např. zpráva z hematologie, PET/CT"></div></div>
+      <div class="field"><label>Poznámka / výsledek</label><textarea id="resultText" placeholder="Můžete si zapsat stručné shrnutí, důležité hodnoty nebo doporučení lékaře."></textarea></div>
+      <div class="field"><label>Nahrát dokument nebo fotku <small>(PDF, Word nebo obrázek; max. 2,5 MB v této verzi)</small></label><input id="resultFile" type="file" accept="image/*,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"></div>
+      <button class="btn primary full" id="addResult">Uložit zprávu / dokument</button>
+      <button class="btn lav full" id="resultPremiumBtn" style="display:none;margin-top:9px">Odemknout Premium pro další zprávy ★</button>
+    </div>
+    <div class="card"><h3>Moje zprávy a dokumenty</h3><div class="list" id="resultList"></div></div>
+  </div>
+</section>
+
+
+<section class="view" id="view-relax">
+  <div class="sectionTitle"><div><h2>Relaxace</h2><span>Chvilka klidu během dne</span></div></div>
+  <div class="relaxHero">
+    <h2>Teď nemusíte nic řešit.</h2>
+    <p>První dvě relaxace používají skutečné nahrávky přírody. Třetí je vaše — můžete si vybrat vlastní hudbu nebo relaxaci uloženou v telefonu.</p>
+  </div>
+
+  <div class="relaxPlayer" id="relaxPlayer">
+    <div class="relaxOrb" id="relaxOrb">♡</div>
+    <div class="relaxNow" id="relaxNow">Relaxace</div>
+    <div class="relaxTimer" id="relaxTimer">00:00</div>
+    <div class="relaxGuide" id="relaxGuide">Pohodlně se posaďte nebo si lehněte a nechte zvuk jen plynout.</div>
+    <div class="volumeRow"><span>🔈</span><input id="relaxVolume" type="range" min="0" max="100" value="60" aria-label="Hlasitost relaxace"><span>🔊</span></div>
+    <div class="btnrow" style="justify-content:center"><button class="btn soft" id="pauseRelax">Pozastavit</button><button class="btn danger" id="stopRelax">Ukončit</button></div>
+  </div>
+
+  <div class="relaxGrid">
+    <div class="relaxTrack">
+      <span class="pill">10 minut</span>
+      <h3>🌿 Lesní potůček &amp; zpěv ptáků</h3>
+      <p>Klidně tekoucí potůček a výraznější zpěv ptáků, aby relaxace působila jako chvíle v lese. Bez mluveného slova.</p>
+      <div class="relaxMeta"><span class="pill purple">bez mluvení</span><span class="pill peach">potůček • les • ptáci</span></div>
+      <button class="btn primary full playRelax" data-track="nature" data-minutes="10">Spustit lesní relaxaci</button>
+    </div>
+    <div class="relaxTrack">
+      <span class="pill">10 minut</span>
+      <h3>🌧️ Déšť &amp; bouřka</h3>
+      <p>Samostatná skutečná nahrávka deště na verandě s jasně slyšitelným hřměním. Je odlišná od lesního potůčku a ptáků. Bez mluveného slova.</p>
+      <div class="relaxMeta"><span class="pill purple">bez mluvení</span><span class="pill peach">déšť • bouřka • hřmění</span></div>
+      <button class="btn primary full playRelax" data-track="rain" data-minutes="10">Spustit déšť a bouřku</button>
+    </div>
+    <div class="relaxTrack">
+      <span class="pill">vlastní</span>
+      <h3>🎧 Moje relaxace</h3>
+      <p>Vyberte si z telefonu vlastní hudbu, meditaci nebo zvuk, který vás uklidňuje. Soubor se neodesílá nikam na internet.</p>
+      <div class="customAudioBox">
+        <div class="field" style="margin-top:0"><label>Vybrat hudbu nebo relaxaci z telefonu</label><input id="customRelaxFile" type="file" accept="audio/*,.mp3,.m4a,.aac,.wav,.ogg,.flac"></div>
+        <div id="customRelaxStatus" class="note">Zatím není vybraná žádná vlastní relaxace.</div>
+        <div id="customRelaxReady" style="display:none">
+          <div class="customFileName" id="customRelaxName"></div>
+          <audio id="customRelaxAudio" controls preload="metadata"></audio>
+          <div class="btnrow" style="margin-top:8px"><button class="btn danger" id="removeCustomRelax" type="button">Odstranit vlastní relaxaci</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="note" style="margin:14px 4px 0">Relaxace je podpůrná funkce pro odpočinek a nenahrazuje zdravotní ani psychologickou péči. Skutečné nahrávky přírody se načítají přes zabezpečené připojení k internetu; pokud nejsou dostupné, aplikace použije odlišný lokální záložní zvuk pro les a pro déšť.</div>
+  <div class="sourceNote">Zvuk vody: Fg2, public domain; zpěv ptáků: Akum20, CC0; déšť a bouřka na verandě: ezwa, public domain. Zdroje: Wikimedia Commons.</div>
+</section>
+
+<section class="view" id="view-doctor">
+  <div class="sectionTitle"><div><h2>Lékař</h2><span>Otázky, kontakty, souhrn a krizová karta</span></div></div>
+  <div class="tabs" id="doctorTabs"><button class="tab active" data-docpanel="questions">Otázky</button><button class="tab" data-docpanel="contacts">Kontakty</button><button class="tab" data-docpanel="summary">Souhrn ★</button><button class="tab" data-docpanel="card">Krizová karta</button></div>
+  <div id="doc-questions" class="docPanel">
+    <div class="card"><h3>Co chci říct doktorovi</h3><div class="field"><input id="questionText" type="text" placeholder="Např. Může být tato bolest vedlejší účinek?"></div><button class="btn primary full" id="addQuestion">Přidat otázku</button></div>
+    <div class="card"><h3>Na příští kontrolu</h3><div class="list" id="questionList"></div></div>
+  </div>
+
+  <div id="doc-contacts" class="docPanel" style="display:none">
+    <div class="card">
+      <div class="itemTop"><div><h3>Důležité kontakty na lékaře</h3><p class="sub">Uložte si ošetřující lékaře, ambulance a pracoviště, abyste je měli vždy po ruce.</p></div><span class="pill">Vždy zdarma</span></div>
+      <div class="grid2"><div class="field"><label>Jméno / ambulance</label><input id="contactName" type="text" placeholder="Např. MUDr. Nováková"></div><div class="field"><label>Obor</label><input id="contactSpecialty" type="text" placeholder="Onkologie, hematologie…"></div></div>
+      <div class="field"><label>Pracoviště</label><input id="contactClinic" type="text" placeholder="Nemocnice / klinika"></div>
+      <div class="grid2"><div class="field"><label>Telefon</label><input id="contactPhone" type="tel" placeholder="+420 …"></div><div class="field"><label>E-mail</label><input id="contactEmail" type="email" placeholder="ordinace@…"></div></div>
+      <div class="field"><label>Poznámka</label><input id="contactNote" type="text" placeholder="Ordinační hodiny, kam volat akutně…"></div>
+      <button class="btn primary full" id="addContact">Uložit kontakt</button>
+    </div>
+    <div class="card"><h3>Moje důležité kontakty</h3><div class="list" id="contactList"></div></div>
+  </div>
+  <div id="doc-summary" class="docPanel" style="display:none">
+    <div class="card"><div class="itemTop"><div><h3>Připravit souhrn pro lékaře</h3><p class="sub">Z vašich záznamů vytvoří přehled příznaků, termínů, léků a otázek. Nejde o lékařský závěr.</p></div><span class="pill purple">Premium ★</span></div><div class="grid2"><div class="field"><label>Období</label><select id="summaryDays"><option value="7">7 dní</option><option value="14" selected>14 dní</option><option value="30">30 dní</option></select></div><div class="field"><label>Styl</label><select id="summaryStyle"><option value="short">Stručný</option><option value="detail">Podrobnější</option></select></div></div><button class="btn primary full" id="makeSummary">Vytvořit souhrn</button><div id="summaryLock" class="warning" style="margin-top:12px">Funkce je součástí Premium. Pro vyzkoušení můžete na kartě Premium zapnout demo Premium.</div><div class="summaryBox" id="summaryBox" style="margin-top:12px">Souhrn se zobrazí zde.</div><div class="btnrow" style="margin-top:10px"><button class="btn soft" id="copySummary">Kopírovat</button><button class="btn lav" id="printSummary">PDF / tisk</button></div></div>
+  </div>
+  <div id="doc-card" class="docPanel" style="display:none">
+    <div class="card"><div class="itemTop"><div><h3>Krizová karta</h3><p class="sub">Základní informace pro situaci, kdy je potřebujete rychle ukázat.</p></div><span class="pill">Vždy zdarma</span></div><div class="field"><label>Diagnóza / důležité diagnózy</label><textarea id="emDiagnosis"></textarea></div><div class="field"><label>Alergie</label><input id="emAllergies" type="text"></div><div class="field"><label>Ošetřující pracoviště</label><input id="emClinic" type="text"></div><div class="grid2"><div class="field"><label>Kontaktní osoba</label><input id="emContact" type="text"></div><div class="field"><label>Telefon</label><input id="emPhone" type="text"></div></div><div class="field"><label>Další důležité informace</label><textarea id="emNote"></textarea></div><button class="btn primary full" id="saveEmergency">Uložit krizovou kartu</button></div>
+    <div class="card" id="emPreview"></div>
+  </div>
+</section>
+
+<section class="view" id="view-premium">
+  <div class="premiumHero"><span class="pill purple">Deník naděje Premium</span><h2>Více přehledu, méně hledání.</h2><p>Premium odemyká delší grafy, chytré souhrny pro kontrolu, rozšířený export a další pohodlné funkce. Bezpečnostní funkce zůstávají zdarma.</p></div>
+  <div class="card"><div class="pricegrid"><div class="price featured"><span class="pill">Nejoblíbenější</span><h3>Ročně</h3><b>799 Kč</b><small>cca 67 Kč / měsíc</small></div><div class="price"><h3>Měsíčně</h3><b>99 Kč</b><small>zrušitelné kdykoli</small></div><div class="price"><h3>Navždy</h3><b>1 790 Kč</b><small>jednorázové odemčení</small></div></div><div class="sep"></div><h3>Co Premium obsahuje</h3><div class="list"><div class="item">★ Přehledy a grafy za 30+ dní</div><div class="item">★ Souhrn „Připrav mě na kontrolu“</div><div class="item">★ Rozšířené PDF reporty</div><div class="item">★ Neomezené ukládání lékařských zpráv a dokumentů</div><div class="item">★ Budoucí sdílení s pečující osobou</div></div><div class="sep"></div><button class="btn primary full" id="togglePremium">Zapnout demo Premium</button><p class="note">Toto je prototyp. Skutečné platby přes Google Play / App Store zatím nejsou připojené a tímto tlačítkem se nic neúčtuje.</p></div>
+</section>
+
+<section class="view" id="printView"><div class="card"><h2>Deník naděje – přehled</h2><div id="printContent"></div></div></section>
+</main>
+</div>
+
+<nav class="bottom noPrint"><div class="nav">
+<button class="navbtn active" data-view="home"><span class="ico">⌂</span>Dnes</button>
+<button class="navbtn" data-view="diary"><span class="ico">✎</span>Deník</button>
+<button class="navbtn" data-view="treatment"><span class="ico">♡</span>Léčba</button>
+<button class="navbtn" data-view="relax"><span class="ico">☁</span>Relax</button>
+<button class="navbtn" data-view="doctor"><span class="ico">☷</span>Lékař</button>
+<button class="navbtn" data-view="premium"><span class="ico">★</span>Premium</button>
+</div></nav>
+
+<div class="modalBack" id="settingsModal"><div class="modal"><div class="modalHead"><h2>Nastavení</h2><button class="close" id="closeSettings">×</button></div><div class="field"><label>Vaše jméno</label><input id="profileName" type="text" placeholder="Např. Kačka"></div><div class="switchrow"><div><b>Větší písmo</b><div class="note">Pro lepší čitelnost.</div></div><button class="switch" id="bigTextSwitch"></button></div><div class="switchrow"><div><b>Demo Premium</b><div class="note">Odemkne prototypové Premium funkce.</div></div><button class="switch" id="premiumSwitch"></button></div><div class="sep"></div><h3>Soukromí a data</h3><p class="note">Tato webová verze ukládá data pouze do úložiště tohoto prohlížeče. Relaxační zvuky se vytvářejí přímo v zařízení a nejsou stahovány ze serveru. Nic neposílá na server. Budoucí Android propojení s Health Connect bude fungovat jen po výslovném souhlasu uživatele a jen pro vybrané typy zdravotních dat, například tep, tlak, SpO₂, váhu, kroky, spánek, teplotu a případně glykémii, pokud ji zdrojová aplikace podporuje. Vymazání dat prohlížeče může zápisy odstranit, proto je vhodné používat zálohu JSON.</p><div class="btnrow"><button class="btn ghost" id="importBtn">Obnovit ze zálohy</button><input id="importFile" type="file" accept="application/json" style="display:none"><button class="btn danger" id="wipeData">Vymazat všechna data</button></div><div class="sep"></div><button class="btn primary full" id="saveSettings">Uložit nastavení</button></div></div>
+
+<script>
+(function(){
+'use strict';
+const KEY='denikNadeje_v6';
+const today=()=>new Date().toISOString().slice(0,10);
+const FREE_RESULT_LIMIT=5;
+const defaultState={profile:{name:'',bigText:false},premium:false,entries:[],appointments:[],meds:[],results:[],questions:[],contacts:[],vitals:[],healthConnect:false,emergency:{diagnosis:'',allergies:'',clinic:'',contact:'',phone:'',note:''}};
+let state=load(); let pendingPhoto=''; let pendingResultFile=null;
+const byId=id=>document.getElementById(id);
+const pain=byId('pain'), fatigue=byId('fatigue'), nausea=byId('nausea'), mood=byId('mood'), appetite=byId('appetite'), sleep=byId('sleep');
+const temperature=byId('temperature'), note=byId('note'), win=byId('win'), entryPhoto=byId('entryPhoto'), photoInfo=byId('photoInfo');
+const apptType=byId('apptType'), apptDate=byId('apptDate'), apptPlace=byId('apptPlace'), apptNote=byId('apptNote'), apptList=byId('apptList');
+const medName=byId('medName'), medDose=byId('medDose'), medTimes=byId('medTimes'), medMode=byId('medMode'), medNote=byId('medNote'), medList=byId('medList');
+const resultDate=byId('resultDate'), resultName=byId('resultName'), resultText=byId('resultText'), resultFile=byId('resultFile'), resultList=byId('resultList');
+const questionText=byId('questionText'), questionList=byId('questionList'), summaryDays=byId('summaryDays'), summaryStyle=byId('summaryStyle'), summaryLock=byId('summaryLock'), summaryBox=byId('summaryBox');
+const emDiagnosis=byId('emDiagnosis'), emAllergies=byId('emAllergies'), emClinic=byId('emClinic'), emContact=byId('emContact'), emPhone=byId('emPhone'), emNote=byId('emNote'), emPreview=byId('emPreview');
+const printContent=byId('printContent'), settingsModal=byId('settingsModal'), profileName=byId('profileName'), importFile=byId('importFile');
+const contactName=byId('contactName'), contactSpecialty=byId('contactSpecialty'), contactClinic=byId('contactClinic'), contactPhone=byId('contactPhone'), contactEmail=byId('contactEmail'), contactNote=byId('contactNote'), contactList=byId('contactList');
+const vitalPulse=byId('vitalPulse'), vitalSys=byId('vitalSys'), vitalDia=byId('vitalDia'), vitalSpo2=byId('vitalSpo2'), vitalBodyTemp=byId('vitalBodyTemp'), vitalGlucose=byId('vitalGlucose'), vitalWeight=byId('vitalWeight'), vitalSteps=byId('vitalSteps'), vitalSleep=byId('vitalSleep'), vitalDate=byId('vitalDate');
+function load(){try{let raw=localStorage.getItem(KEY);if(!raw)raw=localStorage.getItem('denikNadeje_v5');if(!raw)raw=localStorage.getItem('denikNadeje_v4');if(!raw)raw=localStorage.getItem('denikNadeje_v2');const data=raw?JSON.parse(raw):{};return {...structuredClone(defaultState),...data,profile:{...defaultState.profile,...(data.profile||{})},emergency:{...defaultState.emergency,...(data.emergency||{})},contacts:Array.isArray(data.contacts)?data.contacts:[],vitals:Array.isArray(data.vitals)?data.vitals:[]};}catch(e){return structuredClone(defaultState)}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));renderAll()}catch(e){toast('Úložiště zařízení je plné. Zkuste smazat starší přílohu nebo použít menší soubor.');console.error(e)}}
+function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function fmtDate(s){if(!s)return '—';const d=new Date(s.length===10?s+'T12:00':s);return isNaN(d)?s:d.toLocaleString('cs-CZ',{day:'2-digit',month:'2-digit',year:'numeric',hour:s.includes('T')?'2-digit':undefined,minute:s.includes('T')?'2-digit':undefined})}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function avg(arr,key){const v=arr.map(x=>Number(x[key])).filter(Number.isFinite);return v.length?(v.reduce((a,b)=>a+b,0)/v.length):null}
+function daysAgo(n){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-n+1);return d}
+function entriesIn(days){return state.entries.filter(e=>new Date(e.date+'T12:00')>=daysAgo(days)).sort((a,b)=>a.date.localeCompare(b.date))}
+function toast(msg){const t=document.createElement('div');t.textContent=msg;Object.assign(t.style,{position:'fixed',left:'50%',bottom:'100px',transform:'translateX(-50%)',background:'#23323a',color:'#fff',padding:'11px 15px',borderRadius:'14px',zIndex:99,fontWeight:'800',boxShadow:'0 10px 25px rgba(0,0,0,.18)'});document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+
+function renderAll(){
+ document.documentElement.style.fontSize=state.profile?.bigText?'18px':'16px';
+ document.querySelector('#profileName').value=state.profile?.name||'';
+ setSwitch('bigTextSwitch',!!state.profile?.bigText); setSwitch('premiumSwitch',!!state.premium);
+ document.querySelector('#togglePremium').textContent=state.premium?'Vypnout demo Premium':'Zapnout demo Premium';
+ document.querySelector('#hello').textContent=(state.profile?.name?'Ahoj, '+state.profile.name:'Dobrý den');
+ const latest=[...state.entries].sort((a,b)=>b.date.localeCompare(a.date))[0];
+ document.querySelector('#statPain').textContent=latest?latest.pain+'/10':'–';document.querySelector('#statFatigue').textContent=latest?latest.fatigue+'/10':'–';document.querySelector('#statMood').textContent=latest?latest.mood+'/10':'–';
+ const fut=[...state.appointments].filter(a=>new Date(a.date)>=new Date()).sort((a,b)=>a.date.localeCompare(b.date));document.querySelector('#statNext').textContent=fut[0]?new Date(fut[0].date).toLocaleDateString('cs-CZ',{day:'numeric',month:'numeric'}):'–';
+ renderEntries();renderAppointments();renderMeds();renderResults();renderQuestions();renderContacts();renderVitals();renderEmergency();renderChart(Number(document.querySelector('#chartTabs .tab.active')?.dataset.days||7));
+ document.querySelector('#upcomingCount').textContent=fut.length+' '+(fut.length===1?'termín':(fut.length>1&&fut.length<5?'termíny':'termínů'));
+ document.querySelector('#homeUpcoming').innerHTML=fut.slice(0,3).map(a=>`<div class="item"><div class="itemTop"><div><h4>${esc(a.type)}</h4><div class="meta">${fmtDate(a.date)}${a.place?' · '+esc(a.place):''}</div>${a.note?'<p>'+esc(a.note)+'</p>':''}</div><span class="pill">${daysUntil(a.date)}</span></div></div>`).join('')||'<div class="empty">Zatím nemáte uložený žádný nadcházející termín.</div>';
+}
+function daysUntil(s){const a=new Date();a.setHours(0,0,0,0);const b=new Date(s);b.setHours(0,0,0,0);const n=Math.round((b-a)/86400000);return n===0?'dnes':n===1?'zítra':n>1?'za '+n+' d.':'proběhlo'}
+function setSwitch(id,on){document.querySelector('#'+id).classList.toggle('on',on)}
+
+['pain','fatigue','nausea','mood','appetite','sleep'].forEach(id=>document.querySelector('#'+id).addEventListener('input',e=>document.querySelector('#'+id+'Val').textContent=e.target.value));
+document.querySelector('#entryDate').value=today();document.querySelector('#resultDate').value=today();if(vitalDate)vitalDate.value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+
+document.querySelector('#entryPhoto').addEventListener('change',async e=>{const f=e.target.files[0];if(!f){pendingPhoto='';return}if(f.size>6*1024*1024){toast('Fotka je příliš velká.');e.target.value='';return}pendingPhoto=await compressImage(f);document.querySelector('#photoInfo').textContent='Fotka připravena k uložení.'});
+function compressImage(file){return new Promise((resolve,reject)=>{const img=new Image(),r=new FileReader();r.onload=()=>img.src=r.result;r.onerror=reject;img.onload=()=>{const max=1100,scale=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext('2d').drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',.72))};r.readAsDataURL(file)})}
+
+document.querySelector('#saveEntry').onclick=()=>{const date=document.querySelector('#entryDate').value||today();const entry={id:uid(),date,pain:+pain.value,fatigue:+fatigue.value,nausea:+nausea.value,mood:+mood.value,appetite:+appetite.value,sleep:+sleep.value,temperature:temperature.value,note:note.value.trim(),win:win.value.trim(),photo:pendingPhoto};state.entries=state.entries.filter(e=>e.date!==date);state.entries.push(entry);pendingPhoto='';entryPhoto.value='';photoInfo.textContent='';note.value='';win.value='';temperature.value='';save();toast('Zápis uložen.');};
+function renderEntries(){const box=document.querySelector('#entryList');const list=[...state.entries].sort((a,b)=>b.date.localeCompare(a.date));box.innerHTML=list.map(e=>`<div class="item"><div class="itemTop"><div><h4>${fmtDate(e.date)}</h4><div class="meta">Bolest ${e.pain}/10 · Únava ${e.fatigue}/10 · Nevolnost ${e.nausea}/10 · Nálada ${e.mood}/10${e.temperature?' · '+esc(e.temperature)+' °C':''}</div>${e.note?'<p>'+esc(e.note)+'</p>':''}${e.win?'<p><b>Malá výhra:</b> '+esc(e.win)+'</p>':''}</div>${e.photo?'<img src="'+e.photo+'" alt="Fotka k zápisu" style="width:70px;height:70px;object-fit:cover;border-radius:14px">':''}</div><div class="itemActions"><button class="tiny" onclick="window.editEntry(\'${e.id}\')">Upravit</button><button class="tiny" onclick="window.deleteItem(\'entries\',\'${e.id}\')">Smazat</button></div></div>`).join('')||'<div class="empty">První záznam můžete přidat na kartě Dnes.</div>'}
+window.editEntry=id=>{const e=state.entries.find(x=>x.id===id);if(!e)return;showView('home');entryDate.value=e.date;pain.value=e.pain;fatigue.value=e.fatigue;nausea.value=e.nausea;mood.value=e.mood;appetite.value=e.appetite;sleep.value=e.sleep;temperature.value=e.temperature||'';note.value=e.note||'';win.value=e.win||'';pendingPhoto=e.photo||'';['pain','fatigue','nausea','mood','appetite','sleep'].forEach(id2=>document.querySelector('#'+id2+'Val').textContent=document.querySelector('#'+id2).value);window.scrollTo({top:150,behavior:'smooth'})};
+window.deleteItem=(kind,id)=>{if(!confirm('Opravdu chcete tuto položku smazat?'))return;state[kind]=state[kind].filter(x=>x.id!==id);save()};
+
+function renderChart(days){const canvas=document.querySelector('#chart'),ctx=canvas.getContext('2d'),dpr=window.devicePixelRatio||1,w=canvas.clientWidth||650,h=canvas.clientHeight||200;canvas.width=w*dpr;canvas.height=h*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);const data=entriesIn(days);ctx.font='12px '+getComputedStyle(document.body).fontFamily;ctx.fillStyle='#6e7f86';if(!data.length){ctx.fillText('Zatím nejsou data pro graf.',16,28);return}const pad={l:30,r:10,t:15,b:28};for(let i=0;i<=10;i+=2){const y=pad.t+(10-i)/10*(h-pad.t-pad.b);ctx.strokeStyle='rgba(35,50,58,.08)';ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillText(i,4,y+4)}
+ const keys=[['pain','#159e9b'],['fatigue','#8d77b5'],['nausea','#c98768'],['mood','#5b7ea6']]; // colors are app design, not python chart restriction
+ keys.forEach(([key,color])=>{ctx.strokeStyle=color;ctx.lineWidth=2.6;ctx.beginPath();data.forEach((e,i)=>{const x=pad.l+(data.length===1?.5:i/(data.length-1))*(w-pad.l-pad.r),y=pad.t+(10-e[key])/10*(h-pad.t-pad.b);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();});ctx.stroke()});
+ ctx.fillStyle='#6e7f86';const first=data[0].date.slice(5).replace('-','.'),last=data[data.length-1].date.slice(5).replace('-','.');ctx.fillText(first,pad.l,h-7);ctx.textAlign='right';ctx.fillText(last,w-pad.r,h-7);ctx.textAlign='left';
+}
+document.querySelectorAll('#chartTabs .tab').forEach(b=>b.onclick=()=>{const d=+b.dataset.days;if(d>14&&!state.premium){toast('30denní graf je Premium. Zapněte demo Premium.');return}document.querySelectorAll('#chartTabs .tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderChart(d)});window.addEventListener('resize',()=>renderChart(+document.querySelector('#chartTabs .tab.active').dataset.days));
+
+document.querySelector('#addAppt').onclick=()=>{if(!apptDate.value){toast('Vyberte datum a čas.');return}state.appointments.push({id:uid(),type:apptType.value,date:apptDate.value,place:apptPlace.value.trim(),note:apptNote.value.trim()});apptPlace.value='';apptNote.value='';apptDate.value='';save();toast('Termín uložen.')};
+function renderAppointments(){const list=[...state.appointments].sort((a,b)=>a.date.localeCompare(b.date));apptList.innerHTML=list.map(a=>`<div class="item"><div class="itemTop"><div><h4>${esc(a.type)}</h4><div class="meta">${fmtDate(a.date)}${a.place?' · '+esc(a.place):''}</div>${a.note?'<p>'+esc(a.note)+'</p>':''}</div><span class="pill">${daysUntil(a.date)}</span></div><div class="itemActions"><button class="tiny" onclick="window.downloadICS(\'${a.id}\')">Do kalendáře</button><button class="tiny" onclick="window.deleteItem(\'appointments\',\'${a.id}\')">Smazat</button></div></div>`).join('')||'<div class="empty">Zatím nejsou uložené termíny.</div>'}
+window.downloadICS=id=>{const a=state.appointments.find(x=>x.id===id);if(!a)return;const d=new Date(a.date),end=new Date(d.getTime()+3600000),ics=`BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nDTSTART:${icsDate(d)}\nDTEND:${icsDate(end)}\nSUMMARY:${a.type}\nLOCATION:${a.place||''}\nDESCRIPTION:${(a.note||'').replace(/\n/g,' ')}\nEND:VEVENT\nEND:VCALENDAR`;downloadBlob(ics,'text/calendar','termin.ics')};function icsDate(d){return d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z/,'Z')}
+
+document.querySelector('#addMed').onclick=()=>{if(!medName.value.trim()){toast('Zadejte název léku.');return}state.meds.push({id:uid(),name:medName.value.trim(),dose:medDose.value.trim(),times:medTimes.value.trim(),mode:medMode.value,note:medNote.value.trim(),takenDate:''});medName.value=medDose.value=medTimes.value=medNote.value='';save();toast('Lék uložen.')};
+function renderMeds(){medList.innerHTML=state.meds.map(m=>{const taken=m.takenDate===today();return `<div class="item"><div class="itemTop"><div><h4>${esc(m.name)}</h4><div class="meta">${esc(m.dose||'Bez dávky')} · ${esc(m.mode)}${m.times?' · '+esc(m.times):''}</div>${m.note?'<p>'+esc(m.note)+'</p>':''}</div>${m.mode==='Pravidelně'?`<span class="pill ${taken?'':'peach'}">${taken?'Dnes užito':'Dnes neoznačeno'}</span>`:''}</div><div class="itemActions">${m.mode==='Pravidelně'?`<button class="tiny ${taken?'done':''}" onclick="window.toggleTaken(\'${m.id}\')">${taken?'Vrátit':'Označit jako užito'}</button>`:''}<button class="tiny" onclick="window.deleteItem(\'meds\',\'${m.id}\')">Smazat</button></div></div>`}).join('')||'<div class="empty">Zatím nemáte uložené léky.</div>'}
+window.toggleTaken=id=>{const m=state.meds.find(x=>x.id===id);if(m){m.takenDate=m.takenDate===today()?'':today();save()}};
+document.querySelector('#requestNotify').onclick=async()=>{if(!('Notification'in window)){toast('Tento prohlížeč upozornění nepodporuje.');return}const p=await Notification.requestPermission();toast(p==='granted'?'Upozornění povolena.':'Upozornění nebyla povolena.')};
+
+let resultFileData='';document.querySelector('#resultFile').addEventListener('change',e=>{const f=e.target.files[0];pendingResultFile=f||null;if(!f){resultFileData='';return}if(f.size>2.5*1024*1024){toast('Soubor je pro lokální prototyp příliš velký (max. 2,5 MB).');e.target.value='';pendingResultFile=null;return}const r=new FileReader();r.onload=()=>resultFileData=r.result;r.readAsDataURL(f)});
+document.querySelector('#addResult').onclick=()=>{
+  if(!state.premium && state.results.length>=FREE_RESULT_LIMIT){toast('Ve verzi zdarma lze uložit maximálně 5 zpráv. Pro další je potřeba Premium.');showView('premium');return}
+  if(!resultName.value.trim()){toast('Zadejte název zprávy nebo dokumentu.');return}
+  state.results.push({id:uid(),date:resultDate.value||today(),name:resultName.value.trim(),text:resultText.value.trim(),file:resultFileData,fileName:pendingResultFile?.name||''});
+  resultName.value=resultText.value='';resultFile.value='';resultFileData='';pendingResultFile=null;save();toast('Zpráva / dokument uložen.');
+};
+function renderResults(){
+  const count=state.results.length;
+  if(window.resultLimitPill) resultLimitPill.textContent=state.premium?`${count} uložených · Premium`:`${count} / ${FREE_RESULT_LIMIT} zdarma`;
+  if(window.resultLimitInfo){
+    resultLimitInfo.className=(!state.premium && count>=FREE_RESULT_LIMIT)?'warning':'success';
+    resultLimitInfo.innerHTML=state.premium?'Premium je aktivní — můžete ukládat neomezený počet lékařských zpráv a dokumentů.':count>=FREE_RESULT_LIMIT?'Máte využitý bezplatný limit 5 zpráv. Další zprávy a dokumenty lze ukládat s Premium.':`Ve verzi zdarma můžete uložit ještě <b>${FREE_RESULT_LIMIT-count}</b> ${FREE_RESULT_LIMIT-count===1?'zprávu nebo dokument':'zpráv / dokumentů'}. Premium odemyká neomezený počet.`;
+  }
+  if(window.addResult){addResult.textContent=(!state.premium && count>=FREE_RESULT_LIMIT)?'Limit 5 zpráv vyčerpán':'Uložit zprávu / dokument';addResult.classList.toggle('primary',state.premium||count<FREE_RESULT_LIMIT);addResult.classList.toggle('ghost',!state.premium&&count>=FREE_RESULT_LIMIT)}
+  if(window.resultPremiumBtn) resultPremiumBtn.style.display=(!state.premium && count>=FREE_RESULT_LIMIT)?'block':'none';
+  resultList.innerHTML=[...state.results].sort((a,b)=>b.date.localeCompare(a.date)).map(r=>`<div class="item"><div class="itemTop"><div><h4>${esc(r.name)}</h4><div class="meta">${fmtDate(r.date)}${r.fileName?' · '+esc(r.fileName):''}</div></div>${r.file?'<span class="pill purple">Dokument</span>':'<span class="pill">Poznámka</span>'}</div>${r.text?'<p>'+esc(r.text)+'</p>':''}<div class="itemActions">${r.file?`<button class="tiny" onclick="window.openStoredFile(\'${r.id}\')">Otevřít dokument</button>`:''}<button class="tiny" onclick="window.deleteItem(\'results\',\'${r.id}\')">Smazat</button></div></div>`).join('')||'<div class="empty">Zatím nemáte uloženou žádnou lékařskou zprávu ani dokument.</div>'
+}
+document.querySelector('#resultPremiumBtn').onclick=()=>showView('premium');
+window.openStoredFile=id=>{const r=state.results.find(x=>x.id===id);if(r?.file){const w=window.open();w.location=r.file}};
+
+document.querySelector('#addQuestion').onclick=()=>{const t=questionText.value.trim();if(!t)return;state.questions.push({id:uid(),text:t,done:false});questionText.value='';save()};
+function renderQuestions(){questionList.innerHTML=state.questions.map(q=>`<div class="item"><div class="itemTop"><div><h4 style="${q.done?'text-decoration:line-through;opacity:.55':''}">${esc(q.text)}</h4></div><span class="pill ${q.done?'':'purple'}">${q.done?'probráno':'čeká'}</span></div><div class="itemActions"><button class="tiny ${q.done?'done':''}" onclick="window.toggleQuestion(\'${q.id}\')">${q.done?'Vrátit':'Označit jako probrané'}</button><button class="tiny" onclick="window.deleteItem(\'questions\',\'${q.id}\')">Smazat</button></div></div>`).join('')||'<div class="empty">Přidejte si otázky, které nechcete na kontrole zapomenout.</div>'}
+window.toggleQuestion=id=>{const q=state.questions.find(x=>x.id===id);if(q){q.done=!q.done;save()}};
+
+
+// Důležité kontakty na lékaře
+byId('addContact').onclick=()=>{const name=contactName.value.trim();if(!name){toast('Zadejte jméno lékaře nebo název ambulance.');return}state.contacts.push({id:uid(),name,specialty:contactSpecialty.value.trim(),clinic:contactClinic.value.trim(),phone:contactPhone.value.trim(),email:contactEmail.value.trim(),note:contactNote.value.trim()});contactName.value=contactSpecialty.value=contactClinic.value=contactPhone.value=contactEmail.value=contactNote.value='';save();toast('Kontakt uložen.')};
+function renderContacts(){contactList.innerHTML=(state.contacts||[]).map(c=>`<div class="item contactCard"><div class="itemTop"><div><h4>${esc(c.name)}</h4><div class="meta">${esc(c.specialty||'Lékař / ambulance')}${c.clinic?' · '+esc(c.clinic):''}</div>${c.note?'<p>'+esc(c.note)+'</p>':''}</div><span class="pill">důležité</span></div><div class="contactLinks">${c.phone?`<a class="tiny" href="tel:${esc(c.phone.replace(/\s/g,''))}">☎ Zavolat</a>`:''}${c.email?`<a class="tiny" href="mailto:${esc(c.email)}">✉ E-mail</a>`:''}<button class="tiny" onclick="window.deleteItem('contacts','${c.id}')">Smazat</button></div></div>`).join('')||'<div class="empty">Zatím nemáte uložený žádný kontakt na lékaře.</div>'}
+
+// Ruční zdravotní hodnoty; nativní Android verze může později číst podporovaná data z Health Connect.
+const hasValue=el=>String(el.value??'').trim()!=='';
+const numOrBlank=el=>hasValue(el)?Number(el.value):'';
+byId('saveVital').onclick=()=>{
+  const values={pulse:numOrBlank(vitalPulse),sys:numOrBlank(vitalSys),dia:numOrBlank(vitalDia),spo2:numOrBlank(vitalSpo2),bodyTemp:numOrBlank(vitalBodyTemp),glucose:numOrBlank(vitalGlucose),weight:numOrBlank(vitalWeight),steps:numOrBlank(vitalSteps),sleepHours:numOrBlank(vitalSleep)};
+  if(!Object.values(values).some(v=>v!=='')){toast('Zadejte alespoň jednu zdravotní hodnotu.');return}
+  const bad=(v,min,max)=>v!==''&&(!Number.isFinite(v)||v<min||v>max);
+  if(bad(values.pulse,20,250)||bad(values.sys,50,260)||bad(values.dia,30,180)||bad(values.spo2,50,100)||bad(values.bodyTemp,30,45)||bad(values.glucose,.5,50)||bad(values.weight,1,500)||bad(values.steps,0,200000)||bad(values.sleepHours,0,24)){
+    toast('Zkontrolujte zadané hodnoty.');return;
+  }
+  if(values.steps!==''&&!Number.isInteger(values.steps)){toast('Počet kroků zadejte jako celé číslo.');return}
+  state.vitals.push({id:uid(),date:vitalDate.value||new Date().toISOString(),...values});
+  [vitalPulse,vitalSys,vitalDia,vitalSpo2,vitalBodyTemp,vitalGlucose,vitalWeight,vitalSteps,vitalSleep].forEach(el=>el.value='');
+  vitalDate.value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);save();toast('Zdravotní data uložena.');
+};
+function renderVitals(){
+  const list=[...(state.vitals||[])].sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  const latestVal=(key)=>{const x=list.find(v=>v[key]!==''&&v[key]!=null);return x?x[key]:'–'};
+  const latestBp=list.find(v=>v.sys!==''&&v.sys!=null&&v.dia!==''&&v.dia!=null);
+  byId('latestPulse').textContent=latestVal('pulse');
+  byId('latestBp').textContent=latestBp?`${latestBp.sys}/${latestBp.dia}`:'–';
+  byId('latestSpo2').textContent=latestVal('spo2');
+  byId('latestWeight').textContent=latestVal('weight');
+  byId('latestSteps').textContent=latestVal('steps');
+  byId('latestSleep').textContent=latestVal('sleepHours');
+  byId('latestBodyTemp').textContent=latestVal('bodyTemp');
+  byId('latestGlucose').textContent=latestVal('glucose');
+  byId('healthConnectStatus').textContent='Health Connect: připraveno pro Android';
+  const box=byId('vitalList');
+  if(box)box.innerHTML=list.slice(0,8).map(v=>{
+    const parts=[];
+    if(v.pulse!==''&&v.pulse!=null)parts.push(`Tep ${v.pulse}/min`);
+    if(v.sys!==''&&v.sys!=null&&v.dia!==''&&v.dia!=null)parts.push(`Tlak ${v.sys}/${v.dia} mmHg`);
+    if(v.spo2!==''&&v.spo2!=null)parts.push(`SpO₂ ${v.spo2} %`);
+    if(v.bodyTemp!==''&&v.bodyTemp!=null)parts.push(`Teplota ${v.bodyTemp} °C`);
+    if(v.glucose!==''&&v.glucose!=null)parts.push(`Glykémie ${v.glucose} mmol/l`);
+    if(v.weight!==''&&v.weight!=null)parts.push(`Váha ${v.weight} kg`);
+    if(v.steps!==''&&v.steps!=null)parts.push(`Kroky ${v.steps}`);
+    if(v.sleepHours!==''&&v.sleepHours!=null)parts.push(`Spánek ${v.sleepHours} h`);
+    return `<div class="item"><div class="itemTop"><div><h4>${fmtDate(v.date)}</h4><div class="meta">${parts.join(' · ')||'Záznam bez hodnot'}</div></div></div><div class="itemActions"><button class="tiny" onclick="window.deleteItem('vitals','${v.id}')">Smazat</button></div></div>`;
+  }).join('')||'<div class="empty">Zatím nemáte uložené žádné měření.</div>';
+}
+byId('healthConnectBtn').onclick=()=>{alert('V hotové Android verzi může Deník naděje přes Health Connect načítat podporované údaje, například tep, krevní tlak, SpO₂, váhu, kroky, spánek a tělesnou teplotu. Glykémie se může načítat jen tehdy, pokud ji konkrétní zařízení nebo zdravotní aplikace do Health Connect zapisuje a uživatel udělí příslušné oprávnění. Tento webový prototyp k Health Connect přístup nemá.');};
+
+function makeSummary(days,detail){const list=entriesIn(days),from=new Date();from.setDate(from.getDate()-days+1);const lines=[];lines.push(`SOUHRN ZA POSLEDNÍCH ${days} DNÍ`);lines.push(`Vytvořeno: ${new Date().toLocaleString('cs-CZ')}`);if(!list.length)lines.push('\nZa toto období nejsou uložené denní zápisy.');else{const ap=avg(list,'pain'),af=avg(list,'fatigue'),an=avg(list,'nausea'),am=avg(list,'mood');const maxPain=Math.max(...list.map(e=>e.pain));const temps=list.map(e=>parseFloat(String(e.temperature).replace(',','.'))).filter(Number.isFinite);lines.push(`\nZápisy: ${list.length}`);lines.push(`Průměrná bolest: ${ap.toFixed(1)}/10 (maximum ${maxPain}/10)`);lines.push(`Průměrná únava: ${af.toFixed(1)}/10`);lines.push(`Průměrná nevolnost: ${an.toFixed(1)}/10`);lines.push(`Průměrná nálada: ${am.toFixed(1)}/10`);if(temps.length)lines.push(`Teplota: zaznamenané rozmezí ${Math.min(...temps).toFixed(1)}–${Math.max(...temps).toFixed(1)} °C`);if(detail==='detail'){const notes=list.filter(e=>e.note).slice(-8);if(notes.length){lines.push('\nPoznámky:');notes.forEach(e=>lines.push(`• ${fmtDate(e.date)}: ${e.note}`))}const wins=list.filter(e=>e.win);if(wins.length){lines.push('\nMalé výhry:');wins.slice(-5).forEach(e=>lines.push(`• ${e.win}`))}}}
+ const fut=state.appointments.filter(a=>new Date(a.date)>=new Date()).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4);if(fut.length){lines.push('\nNadcházející termíny:');fut.forEach(a=>lines.push(`• ${fmtDate(a.date)} – ${a.type}${a.place?' ('+a.place+')':''}`))}
+ if(state.meds.length){lines.push('\nUložené léky:');state.meds.forEach(m=>lines.push(`• ${m.name}${m.dose?' – '+m.dose:''}${m.times?' ('+m.times+')':''}`))}
+ const vital=[...(state.vitals||[])].sort((a,b)=>String(b.date).localeCompare(String(a.date)))[0];if(vital){lines.push('\nPoslední ručně uložená zdravotní data:');if(vital.pulse!==''&&vital.pulse!=null)lines.push(`• Tep: ${vital.pulse}/min`);if(vital.sys!==''&&vital.sys!=null&&vital.dia!==''&&vital.dia!=null)lines.push(`• Tlak: ${vital.sys}/${vital.dia} mmHg`);if(vital.spo2!==''&&vital.spo2!=null)lines.push(`• SpO₂: ${vital.spo2} %`);if(vital.bodyTemp!==''&&vital.bodyTemp!=null)lines.push(`• Tělesná teplota: ${vital.bodyTemp} °C`);if(vital.glucose!==''&&vital.glucose!=null)lines.push(`• Glykémie: ${vital.glucose} mmol/l`);if(vital.weight!==''&&vital.weight!=null)lines.push(`• Váha: ${vital.weight} kg`);if(vital.steps!==''&&vital.steps!=null)lines.push(`• Kroky: ${vital.steps}`);if(vital.sleepHours!==''&&vital.sleepHours!=null)lines.push(`• Spánek: ${vital.sleepHours} h`)}
+ const qs=state.questions.filter(q=>!q.done);if(qs.length){lines.push('\nOtázky pro lékaře:');qs.forEach(q=>lines.push(`• ${q.text}`))}
+ lines.push('\nPoznámka: Tento souhrn je vytvořen z vlastních záznamů uživatele a nenahrazuje lékařské posouzení.');return lines.join('\n')}
+document.querySelector('#makeSummary').onclick=()=>{if(!state.premium){toast('Nejdřív zapněte demo Premium.');return}summaryBox.textContent=makeSummary(+summaryDays.value,summaryStyle.value);summaryLock.style.display='none'};document.querySelector('#copySummary').onclick=async()=>{await navigator.clipboard.writeText(summaryBox.textContent);toast('Souhrn zkopírován.')};document.querySelector('#printSummary').onclick=()=>{preparePrint(summaryBox.textContent.replace(/\n/g,'<br>'));window.print()};
+
+function fillEmergency(){const e=state.emergency||{};emDiagnosis.value=e.diagnosis||'';emAllergies.value=e.allergies||'';emClinic.value=e.clinic||'';emContact.value=e.contact||'';emPhone.value=e.phone||'';emNote.value=e.note||''}
+document.querySelector('#saveEmergency').onclick=()=>{state.emergency={diagnosis:emDiagnosis.value.trim(),allergies:emAllergies.value.trim(),clinic:emClinic.value.trim(),contact:emContact.value.trim(),phone:emPhone.value.trim(),note:emNote.value.trim()};save();toast('Krizová karta uložena.')};
+function renderEmergency(){fillEmergency();const e=state.emergency||{};emPreview.innerHTML=`<div class="itemTop"><div><h3>Krizová karta – náhled</h3><p class="sub">Lze rychle otevřít a ukázat.</p></div><span class="pill">zdarma</span></div><p><b>Diagnóza:</b> ${esc(e.diagnosis||'—')}</p><p><b>Alergie:</b> ${esc(e.allergies||'—')}</p><p><b>Pracoviště:</b> ${esc(e.clinic||'—')}</p><p><b>Kontakt:</b> ${esc(e.contact||'—')} ${esc(e.phone||'')}</p><p><b>Další:</b> ${esc(e.note||'—')}</p><p><b>Uložené léky:</b> ${state.meds.length?state.meds.map(m=>esc(m.name)).join(', '):'—'}</p>`}
+
+function preparePrint(extra=''){const list=[...state.entries].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,30);printContent.innerHTML=`${extra?'<h3>Souhrn</h3><p>'+extra+'</p>':''}<h3>Poslední zápisy</h3>${list.map(e=>`<p><b>${fmtDate(e.date)}</b> – bolest ${e.pain}/10, únava ${e.fatigue}/10, nevolnost ${e.nausea}/10, nálada ${e.mood}/10${e.note?'<br>'+esc(e.note):''}</p>`).join('')||'<p>Bez záznamů.</p>'}<h3>Otázky pro lékaře</h3>${state.questions.filter(q=>!q.done).map(q=>'<p>• '+esc(q.text)+'</p>').join('')||'<p>Bez otázek.</p>'}`}
+document.querySelector('#printDiary').onclick=()=>{preparePrint();window.print()};
+
+document.querySelector('#exportData').onclick=()=>downloadBlob(JSON.stringify(state,null,2),'application/json','denik-nadeje-zaloha-'+today()+'.json');function downloadBlob(content,type,name){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+
+document.querySelector('#importBtn').onclick=()=>importFile.click();document.querySelector('#importFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const data=JSON.parse(r.result);state=Object.assign({},defaultState,data);save();toast('Záloha obnovena.')}catch{toast('Soubor zálohy není platný.')}};r.readAsText(f)});
+document.querySelector('#wipeData').onclick=()=>{if(confirm('Opravdu vymazat všechny zápisy, léky, termíny a nastavení?')){state=structuredClone(defaultState);save();toast('Data byla vymazána.')}};
+
+
+// Relaxace – skutečné nahrávky přírody + vlastní soubor uživatele.
+const relaxUI={player:byId('relaxPlayer'),orb:byId('relaxOrb'),now:byId('relaxNow'),timer:byId('relaxTimer'),guide:byId('relaxGuide'),volume:byId('relaxVolume'),pause:byId('pauseRelax'),stop:byId('stopRelax')};
+let relaxAudio=null, relaxMaster=null, relaxNodes=[], relaxTimers=[], relaxMedia=[], relaxTick=null, relaxEndsAt=0, relaxRemaining=0, relaxPaused=false, relaxTrack='', relaxDuration=0;
+const relaxInfo={
+  nature:{name:'Lesní potůček & zpěv ptáků',guide:'Jen poslouchejte klidný potůček a ptáky. Dýchejte přirozeně a nechte okolní zvuky plynout.'},
+  rain:{name:'Déšť & bouřka',guide:'Poslouchejte klidný déšť a přirozené hřmění bouřky. Nemusíte nic dělat, jen chvíli odpočívat.'}
+};
+const RELAX_MEDIA={
+  nature:[
+    {src:'https://upload.wikimedia.org/wikipedia/commons/2/26/Flowing-water-100019.ogg',mix:.48},
+    {src:'https://upload.wikimedia.org/wikipedia/commons/2/2f/Birds_chirping_in_a_garden.ogg',mix:.82}
+  ],
+  rain:[
+    {src:'https://upload.wikimedia.org/wikipedia/commons/e/e7/Thunder_and_rain_on_a_v.ogg',mix:.88}
+  ]
+};
+function fmtRelaxTime(sec){sec=Math.max(0,Math.ceil(sec));return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')}
+function makeNoise(ctx,seconds=3){const len=Math.max(1,Math.floor(ctx.sampleRate*seconds)),b=ctx.createBuffer(1,len,ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;const s=ctx.createBufferSource();s.buffer=b;s.loop=true;return s}
+function addNode(n){relaxNodes.push(n);return n}
+function addRelaxTimer(id){relaxTimers.push(id);return id}
+function currentRelaxVolume(){return Math.max(0,Math.min(1,(+relaxUI.volume.value||0)/100))}
+function applyRelaxVolume(){const v=currentRelaxVolume();relaxMedia.forEach(m=>{m.volume=Math.max(0,Math.min(1,v*(+m.dataset.mix||.7)))});if(relaxMaster&&relaxAudio)relaxMaster.gain.setTargetAtTime(v*.46,relaxAudio.currentTime,.04)}
+function clearRelaxMedia(){relaxMedia.forEach(m=>{try{m.pause();m.currentTime=0;m.removeAttribute('src');m.load()}catch(e){}});relaxMedia=[]}
+
+async function createRecordedRelax(track){
+  const cfg=RELAX_MEDIA[track];if(!cfg)return false;
+  clearRelaxMedia();
+  relaxMedia=cfg.map(x=>{const a=new Audio();a.src=x.src;a.loop=true;a.preload='auto';a.playsInline=true;a.dataset.mix=String(x.mix);a.volume=currentRelaxVolume()*x.mix;return a});
+  try{
+    const results=await Promise.allSettled(relaxMedia.map(a=>a.play()));
+    if(results.every(r=>r.status==='rejected'))throw new Error('media unavailable');
+    return true;
+  }catch(e){clearRelaxMedia();return false}
+}
+
+function createFallbackSound(track){
+  const C=window.AudioContext||window.webkitAudioContext;if(!C){toast('Zvuk se na tomto telefonu nepodařilo spustit.');return false}
+  relaxAudio=new C();relaxMaster=addNode(relaxAudio.createGain());relaxMaster.gain.value=currentRelaxVolume()*.46;relaxMaster.connect(relaxAudio.destination);
+  if(track==='nature'){
+    // Jemný potůček: nižší, měkčí šum + častější ptačí hlasy jako offline záloha.
+    const water=addNode(makeNoise(relaxAudio,7)),lp=addNode(relaxAudio.createBiquadFilter()),hp=addNode(relaxAudio.createBiquadFilter()),g=addNode(relaxAudio.createGain()),lfo=addNode(relaxAudio.createOscillator()),lg=addNode(relaxAudio.createGain());
+    hp.type='highpass';hp.frequency.value=120;lp.type='lowpass';lp.frequency.value=1250;g.gain.value=.18;lfo.type='sine';lfo.frequency.value=.08;lg.gain.value=.028;lfo.connect(lg);lg.connect(g.gain);water.connect(hp);hp.connect(lp);lp.connect(g);g.connect(relaxMaster);water.start();lfo.start();
+    const forest=addNode(makeNoise(relaxAudio,6)),flp=addNode(relaxAudio.createBiquadFilter()),fg=addNode(relaxAudio.createGain());flp.type='lowpass';flp.frequency.value=300;fg.gain.value=.018;forest.connect(flp);flp.connect(fg);fg.connect(relaxMaster);forest.start();
+    const bird=()=>{if(!relaxAudio||relaxAudio.state==='closed'||relaxPaused)return;const t=relaxAudio.currentTime;const phrases=2+Math.floor(Math.random()*4),base=1500+Math.random()*900;for(let k=0;k<phrases;k++){const o=relaxAudio.createOscillator(),bg=relaxAudio.createGain(),st=t+k*(.12+Math.random()*.10);o.type='sine';o.frequency.setValueAtTime(base*(.88+Math.random()*.22),st);o.frequency.exponentialRampToValueAtTime(base*(1.18+Math.random()*.28),st+.07);o.frequency.exponentialRampToValueAtTime(base*(.94+Math.random()*.15),st+.17);bg.gain.setValueAtTime(.0001,st);bg.gain.exponentialRampToValueAtTime(.052+Math.random()*.024,st+.018);bg.gain.exponentialRampToValueAtTime(.0001,st+.22);o.connect(bg);bg.connect(relaxMaster);o.start(st);o.stop(st+.24)}};
+    bird();const scheduleBird=()=>{if(!relaxAudio||relaxAudio.state==='closed')return;if(!relaxPaused)bird();addRelaxTimer(setTimeout(scheduleBird,1800+Math.random()*3800))};addRelaxTimer(setTimeout(scheduleBird,1300));
+  }else if(track==='rain'){
+    // Klidný déšť + měkké vzdálené hřmění jako offline záloha.
+    const rain=addNode(makeNoise(relaxAudio,7)),hp=addNode(relaxAudio.createBiquadFilter()),lp=addNode(relaxAudio.createBiquadFilter()),rg=addNode(relaxAudio.createGain());hp.type='highpass';hp.frequency.value=450;lp.type='lowpass';lp.frequency.value=4200;rg.gain.value=.12;rain.connect(hp);hp.connect(lp);lp.connect(rg);rg.connect(relaxMaster);rain.start();
+    const soft=addNode(makeNoise(relaxAudio,6)),slp=addNode(relaxAudio.createBiquadFilter()),sg=addNode(relaxAudio.createGain());slp.type='lowpass';slp.frequency.value=900;sg.gain.value=.035;soft.connect(slp);slp.connect(sg);sg.connect(relaxMaster);soft.start();
+    const thunder=()=>{if(!relaxAudio||relaxAudio.state==='closed'||relaxPaused)return;const t=relaxAudio.currentTime,o=relaxAudio.createOscillator(),tg=relaxAudio.createGain(),n=makeNoise(relaxAudio,4),nlp=relaxAudio.createBiquadFilter(),ng=relaxAudio.createGain();o.type='sine';o.frequency.setValueAtTime(72,t);o.frequency.exponentialRampToValueAtTime(38,t+4);tg.gain.setValueAtTime(.0001,t);tg.gain.exponentialRampToValueAtTime(.06,t+.35);tg.gain.exponentialRampToValueAtTime(.0001,t+5.2);nlp.type='lowpass';nlp.frequency.value=180;ng.gain.setValueAtTime(.0001,t);ng.gain.exponentialRampToValueAtTime(.045,t+.25);ng.gain.exponentialRampToValueAtTime(.0001,t+4.7);o.connect(tg);tg.connect(relaxMaster);n.connect(nlp);nlp.connect(ng);ng.connect(relaxMaster);o.start(t);o.stop(t+5.4);n.start(t);n.stop(t+5)};
+    const scheduleThunder=()=>{if(!relaxAudio||relaxAudio.state==='closed')return;if(!relaxPaused)thunder();addRelaxTimer(setTimeout(scheduleThunder,18000+Math.random()*22000))};addRelaxTimer(setTimeout(scheduleThunder,9000+Math.random()*9000));
+  }
+  if(relaxAudio.state==='suspended')relaxAudio.resume();return true;
+}
+function updateRelaxTimer(){const sec=relaxPaused?relaxRemaining:Math.max(0,(relaxEndsAt-Date.now())/1000);relaxRemaining=sec;relaxUI.timer.textContent=fmtRelaxTime(sec);if(sec<=0&&!relaxPaused){stopRelaxation(false);toast('Relaxace je u konce.')}}
+async function startRelaxation(track,minutes){
+  stopRelaxation(true);if(customRelaxAudio&&!customRelaxAudio.paused)customRelaxAudio.pause();
+  relaxTrack=track;relaxRemaining=Math.max(30,minutes*60);relaxDuration=relaxRemaining;relaxEndsAt=Date.now()+relaxRemaining*1000;relaxPaused=false;
+  relaxUI.player.classList.add('show');relaxUI.orb.classList.remove('paused');relaxUI.now.textContent=relaxInfo[track].name;relaxUI.guide.textContent=relaxInfo[track].guide;relaxUI.pause.textContent='Pozastavit';updateRelaxTimer();
+  const recorded=await createRecordedRelax(track);if(!recorded){toast('Skutečná nahrávka se nenačetla. Spouštím offline zvukovou zálohu.');if(!createFallbackSound(track)){stopRelaxation(true);return}}
+  relaxTick=setInterval(updateRelaxTimer,1000);setTimeout(()=>relaxUI.player.scrollIntoView({behavior:'smooth',block:'center'}),80)
+}
+function stopRelaxation(silent=false){if(relaxTick){clearInterval(relaxTick);relaxTick=null}relaxTimers.forEach(id=>{clearInterval(id);clearTimeout(id)});relaxTimers=[];clearRelaxMedia();relaxNodes.forEach(n=>{try{if(n.stop)n.stop()}catch(e){};try{n.disconnect()}catch(e){}});relaxNodes=[];if(relaxAudio){try{relaxAudio.close()}catch(e){};relaxAudio=null}relaxMaster=null;relaxPaused=false;relaxTrack='';relaxDuration=0;relaxUI.player.classList.remove('show');relaxUI.orb.classList.add('paused');if(!silent)toast('Relaxace ukončena.')}
+document.querySelectorAll('.playRelax').forEach(b=>b.addEventListener('click',()=>startRelaxation(b.dataset.track,+b.dataset.minutes||5)));
+relaxUI.stop.addEventListener('click',()=>stopRelaxation(false));
+relaxUI.pause.addEventListener('click',async()=>{if(!relaxTrack)return;if(!relaxPaused){relaxRemaining=Math.max(0,(relaxEndsAt-Date.now())/1000);relaxPaused=true;relaxMedia.forEach(m=>m.pause());if(relaxAudio)await relaxAudio.suspend();relaxUI.pause.textContent='Pokračovat';relaxUI.orb.classList.add('paused');updateRelaxTimer()}else{relaxPaused=false;relaxEndsAt=Date.now()+relaxRemaining*1000;for(const m of relaxMedia){try{await m.play()}catch(e){}}if(relaxAudio)await relaxAudio.resume();relaxUI.pause.textContent='Pozastavit';relaxUI.orb.classList.remove('paused')}});
+relaxUI.volume.addEventListener('input',applyRelaxVolume);
+
+// Vlastní relaxace: soubor z telefonu se ukládá pouze do lokálního IndexedDB úložiště.
+const customRelaxFile=byId('customRelaxFile'),customRelaxAudio=byId('customRelaxAudio'),customRelaxName=byId('customRelaxName'),customRelaxStatus=byId('customRelaxStatus'),customRelaxReady=byId('customRelaxReady'),removeCustomRelax=byId('removeCustomRelax');
+let customRelaxUrl='';
+function openRelaxDb(){return new Promise((resolve,reject)=>{if(!('indexedDB' in window))return reject(new Error('IndexedDB'));const req=indexedDB.open('DenikNadejeMedia',1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('files'))db.createObjectStore('files',{keyPath:'id'})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
+async function dbPutCustom(file){const db=await openRelaxDb();return new Promise((resolve,reject)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').put({id:'customRelax',name:file.name,type:file.type||'audio/*',blob:file,updated:Date.now()});tx.oncomplete=()=>{db.close();resolve()};tx.onerror=()=>{db.close();reject(tx.error)}})}
+async function dbGetCustom(){const db=await openRelaxDb();return new Promise((resolve,reject)=>{const tx=db.transaction('files','readonly'),req=tx.objectStore('files').get('customRelax');req.onsuccess=()=>{const v=req.result;db.close();resolve(v)};req.onerror=()=>{db.close();reject(req.error)}})}
+async function dbDeleteCustom(){const db=await openRelaxDb();return new Promise((resolve,reject)=>{const tx=db.transaction('files','readwrite');tx.objectStore('files').delete('customRelax');tx.oncomplete=()=>{db.close();resolve()};tx.onerror=()=>{db.close();reject(tx.error)}})}
+function showCustomRelax(blob,name){if(customRelaxUrl)URL.revokeObjectURL(customRelaxUrl);customRelaxUrl=URL.createObjectURL(blob);customRelaxAudio.src=customRelaxUrl;customRelaxAudio.load();customRelaxName.textContent=name||'Moje relaxace';customRelaxReady.style.display='block';customRelaxStatus.textContent='Vlastní relaxace je připravená k poslechu a zůstává jen v tomto zařízení.'}
+function clearCustomRelaxUi(){if(customRelaxUrl){URL.revokeObjectURL(customRelaxUrl);customRelaxUrl=''}customRelaxAudio.pause();customRelaxAudio.removeAttribute('src');customRelaxAudio.load();customRelaxReady.style.display='none';customRelaxName.textContent='';customRelaxStatus.textContent='Zatím není vybraná žádná vlastní relaxace.';customRelaxFile.value=''}
+customRelaxFile.addEventListener('change',async()=>{const f=customRelaxFile.files&&customRelaxFile.files[0];if(!f)return;const audioLike=(f.type&&f.type.startsWith('audio/'))||/\.(mp3|m4a|aac|wav|ogg|flac)$/i.test(f.name);if(!audioLike){toast('Vyberte prosím zvukový soubor.');customRelaxFile.value='';return}if(f.size>100*1024*1024){toast('Soubor je příliš velký. Maximum je 100 MB.');customRelaxFile.value='';return}stopRelaxation(true);showCustomRelax(f,f.name);try{await dbPutCustom(f);toast('Vlastní relaxace byla uložena do zařízení.')}catch(e){customRelaxStatus.textContent='Relaxace je připravená pro tento otevřený prototyp. Pro trvalé uložení ji prohlížeč nepovolil.';toast('Hudbu lze přehrát, ale nepodařilo se ji trvale uložit.')}});
+customRelaxAudio.addEventListener('play',()=>stopRelaxation(true));
+removeCustomRelax.addEventListener('click',async()=>{clearCustomRelaxUi();try{await dbDeleteCustom()}catch(e){}toast('Vlastní relaxace byla odstraněna.')});
+(async()=>{try{const saved=await dbGetCustom();if(saved&&saved.blob)showCustomRelax(saved.blob,saved.name)}catch(e){}})();
+
+function showView(name){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelector('#view-'+name).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===name));if(name==='diary')setTimeout(()=>renderChart(+document.querySelector('#chartTabs .tab.active').dataset.days),30);window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.navbtn').forEach(b=>b.onclick=()=>showView(b.dataset.view));
+function tabGroup(selector,panPrefix,dataKey){document.querySelectorAll(selector+' .tab').forEach(b=>b.onclick=()=>{document.querySelectorAll(selector+' .tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const val=b.dataset[dataKey];document.querySelectorAll('.'+(panPrefix==='panel-'?'treatPanel':'docPanel')).forEach(p=>p.style.display='none');document.querySelector('#'+panPrefix+val).style.display='block'})}
+tabGroup('#treatTabs','panel-','panel');tabGroup('#doctorTabs','doc-','docpanel');
+
+document.querySelector('#settingsBtn').onclick=()=>settingsModal.classList.add('show');document.querySelector('#closeSettings').onclick=()=>settingsModal.classList.remove('show');settingsModal.onclick=e=>{if(e.target===settingsModal)settingsModal.classList.remove('show')};
+document.querySelector('#bigTextSwitch').onclick=()=>{state.profile.bigText=!state.profile.bigText;setSwitch('bigTextSwitch',state.profile.bigText)};document.querySelector('#premiumSwitch').onclick=()=>{state.premium=!state.premium;setSwitch('premiumSwitch',state.premium)};document.querySelector('#saveSettings').onclick=()=>{state.profile.name=profileName.value.trim();save();settingsModal.classList.remove('show');toast('Nastavení uloženo.')};
+document.querySelector('#togglePremium').onclick=()=>{state.premium=!state.premium;save();toast(state.premium?'Demo Premium zapnuto.':'Demo Premium vypnuto.')};
+
+// Medication reminders while app is open
+setInterval(()=>{if(!('Notification' in window) || Notification.permission!=='granted')return;const hm=new Date().toTimeString().slice(0,5);state.meds.forEach(m=>{if(m.mode==='Pravidelně'&&m.times.split(',').map(x=>x.trim()).includes(hm)&&m.takenDate!==today()){const stamp='notify_'+m.id+'_'+today()+'_'+hm;if(!sessionStorage.getItem(stamp)){new Notification('Deník naděje',{body:`Čas na lék: ${m.name}${m.dose?' – '+m.dose:''}`});sessionStorage.setItem(stamp,'1')}}})},30000);
+
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
+renderAll();
+})();
+</script>
+</body>
+</html>

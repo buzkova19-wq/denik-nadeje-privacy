@@ -1,0 +1,26 @@
+{
+  "name": "Deník naděje",
+  "short_name": "Deník naděje",
+  "description": "Osobní zdravotní deník pro přehled příznaků, léčby, léků, termínů a poznámek.",
+  "lang": "cs",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f7fffd",
+  "theme_color": "#dff8f3",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
