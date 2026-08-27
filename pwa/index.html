@@ -51,8 +51,9 @@ input[type=text],input[type=number],input[type=date],input[type=time],input[type
 @media(max-width:520px){.minirow{grid-template-columns:repeat(2,1fr)}.grid2,.grid3,.pricegrid{grid-template-columns:1fr}.rangeLine{grid-template-columns:92px 1fr 38px}.card{padding:15px}.brand{font-size:2.35rem}.hero{padding:18px}.navbtn{font-size:.56rem}}
 
 .healthGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}.healthStat{background:linear-gradient(145deg,#ffffff,#f3fffb);border:1px solid var(--line);border-radius:18px;padding:14px}.healthStat b{display:block;font-size:1.25rem;color:#247a75}.healthStat span{font-size:.78rem;color:var(--muted)}
+.glucoseHero{background:linear-gradient(135deg,#e6fbf5,#f2ecff 58%,#fff1e7);border-radius:28px;padding:20px;margin:10px 0 14px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.85)}.glucoseHero h2{margin:0 0 6px}.glucoseHero p{margin:0;color:var(--muted);line-height:1.5}.glucoseStats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:12px 0}.glucoseStat{background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:17px;padding:12px}.glucoseStat b{display:block;font-size:1.16rem;color:#247a75}.glucoseStat span{font-size:.74rem;color:var(--muted)}
 .contactCard{border-left:4px solid rgba(21,158,155,.55)}.contactLinks{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.contactLinks a{text-decoration:none}.connectCard{background:linear-gradient(135deg,#e7fbf6,#f1edff 55%,#fff2e8)}
-@media(max-width:680px){.healthGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.healthGrid,.glucoseStats{grid-template-columns:1fr 1fr}}
 @media (prefers-color-scheme: dark){html,body{background:#f7fffd!important;color:#23323a!important}.card,.item,.mini,.price,.modal,.chartWrap,.summaryBox,input,textarea,select{background-color:rgba(255,255,255,.94)!important;color:#23323a!important}.bottom{background:rgba(255,255,255,.94)!important}.topbar{background:linear-gradient(to bottom,rgba(247,253,252,.98),rgba(247,253,252,.82),transparent)!important}}
 
 .relaxHero{background:linear-gradient(135deg,#e2faf4 0%,#eee8ff 48%,#fff0e7 100%);border-radius:30px;padding:22px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.9);margin:10px 0 16px}.relaxHero h2{margin:0 0 6px;font-size:1.55rem}.relaxHero p{margin:0;color:var(--muted);line-height:1.55}
@@ -133,12 +134,59 @@ input[type=text],input[type=number],input[type=date],input[type=time],input[type
     </div>
     <div class="field"><label>Datum a čas</label><input id="vitalDate" type="datetime-local"></div>
     <div class="btnrow"><button class="btn primary" id="saveVital">Uložit zdravotní data</button><button class="btn lav" id="healthConnectBtn">Jak propojení funguje</button></div>
+    <button class="btn soft full" id="openGlucose" style="margin-top:10px">🩸 Glykémie a samostatný graf</button>
     <div class="note" style="margin-top:10px">Přímé čtení z Health Connect nelze spustit v tomto HTML prototypu. V nativní Android verzi se zapne až po výslovném souhlasu uživatele a schválení potřebných oprávnění. Dostupnost jednotlivých hodnot závisí na hodinkách a aplikaci, která je do Health Connect zapisuje.</div><div class="sep"></div><h3>Poslední měření</h3><div class="list" id="vitalList"></div>
   </div>
 
   <div class="card">
     <div class="itemTop"><div><h3>Co je nejblíž</h3><p class="sub">Termíny, které máte před sebou.</p></div><span class="pill" id="upcomingCount">0 termínů</span></div>
     <div class="list" id="homeUpcoming"></div>
+  </div>
+</section>
+
+
+<section class="view" id="view-glucose">
+  <div class="sectionTitle"><div><h2>Glykémie</h2><span>Samostatný přehled pro diabetiky</span></div><button class="btn ghost" id="backFromGlucose">← Zpět</button></div>
+  <div class="glucoseHero">
+    <h2>🩸 Glykémie na jednom místě</h2>
+    <p>Hodnoty můžete zatím zadávat ručně. Graf se vytváří přímo z uložených měření. Data zůstávají v tomto zařízení.</p>
+  </div>
+
+  <div class="card">
+    <h3>Přidat glykémii</h3>
+    <div class="grid2">
+      <div class="field"><label>Glykémie (mmol/l)</label><input id="glucoseValue" type="number" min="0.5" max="50" step="0.1" placeholder="např. 6,2"></div>
+      <div class="field"><label>Datum a čas</label><input id="glucoseDate" type="datetime-local"></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Kdy bylo měření</label><select id="glucoseContext"><option value="">Bez označení</option><option>Nalačno</option><option>Před jídlem</option><option>1 hodinu po jídle</option><option>2 hodiny po jídle</option><option>Před spaním</option><option>V noci</option><option>Při potížích</option></select></div>
+      <div class="field"><label>Poznámka <small>(volitelné)</small></label><input id="glucoseNote" type="text" placeholder="jídlo, pohyb, inzulin…"></div>
+    </div>
+    <button class="btn primary full" id="saveGlucose">Uložit glykémii</button>
+  </div>
+
+  <div class="card">
+    <div class="itemTop"><div><h3>Graf glykémie</h3><p class="sub">Vyberte období. Cílové rozmezí zde záměrně není pevně nastavené – liší se podle doporučení lékaře.</p></div><span class="pill">mmol/l</span></div>
+    <div class="tabs" id="glucoseTabs"><button class="tab active" data-days="1">24 h</button><button class="tab" data-days="7">7 dní</button><button class="tab" data-days="14">14 dní</button><button class="tab" data-days="30">30 dní</button></div>
+    <div class="glucoseStats">
+      <div class="glucoseStat"><b id="glucoseLatest">–</b><span>poslední</span></div>
+      <div class="glucoseStat"><b id="glucoseAverage">–</b><span>průměr</span></div>
+      <div class="glucoseStat"><b id="glucoseMin">–</b><span>minimum</span></div>
+      <div class="glucoseStat"><b id="glucoseMax">–</b><span>maximum</span></div>
+    </div>
+    <div class="chartWrap"><canvas id="glucoseChart" width="700" height="240"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="itemTop"><div><h3>Historie glykémie</h3><p class="sub">Nejnovější měření jsou nahoře.</p></div><span class="pill purple" id="glucoseCount">0 měření</span></div>
+    <div class="list" id="glucoseList"></div>
+  </div>
+
+  <div class="card">
+    <h3>Automatické načítání ze senzoru</h3>
+    <p class="sub">Připravujeme pro nativní verzi aplikace. Cílem je načítání podporovaných hodnot po souhlasu uživatele přes Apple Health / HealthKit na iOS a Health Connect na Androidu; přímé propojení Dexcom a FreeStyle Libre se bude řešit podle dostupných rozhraní.</p>
+    <div class="btnrow"><span class="pill">Dexcom</span><span class="pill">FreeStyle Libre</span><span class="pill purple">Apple Health</span><span class="pill purple">Health Connect</span></div>
+    <div class="warning" style="margin-top:12px">Deník naděje pouze eviduje a zobrazuje naměřené hodnoty. Nenavrhuje dávku inzulinu ani změny léčby.</div>
   </div>
 </section>
 
@@ -282,7 +330,7 @@ input[type=text],input[type=number],input[type=date],input[type=time],input[type
 <script>
 (function(){
 'use strict';
-const KEY='denikNadeje_v6';
+const KEY='denikNadeje_v7';
 const today=()=>new Date().toISOString().slice(0,10);
 const FREE_RESULT_LIMIT=5;
 const defaultState={profile:{name:'',bigText:false},premium:false,entries:[],appointments:[],meds:[],results:[],questions:[],contacts:[],vitals:[],healthConnect:false,emergency:{diagnosis:'',allergies:'',clinic:'',contact:'',phone:'',note:''}};
@@ -298,7 +346,8 @@ const emDiagnosis=byId('emDiagnosis'), emAllergies=byId('emAllergies'), emClinic
 const printContent=byId('printContent'), settingsModal=byId('settingsModal'), profileName=byId('profileName'), importFile=byId('importFile');
 const contactName=byId('contactName'), contactSpecialty=byId('contactSpecialty'), contactClinic=byId('contactClinic'), contactPhone=byId('contactPhone'), contactEmail=byId('contactEmail'), contactNote=byId('contactNote'), contactList=byId('contactList');
 const vitalPulse=byId('vitalPulse'), vitalSys=byId('vitalSys'), vitalDia=byId('vitalDia'), vitalSpo2=byId('vitalSpo2'), vitalBodyTemp=byId('vitalBodyTemp'), vitalGlucose=byId('vitalGlucose'), vitalWeight=byId('vitalWeight'), vitalSteps=byId('vitalSteps'), vitalSleep=byId('vitalSleep'), vitalDate=byId('vitalDate');
-function load(){try{let raw=localStorage.getItem(KEY);if(!raw)raw=localStorage.getItem('denikNadeje_v5');if(!raw)raw=localStorage.getItem('denikNadeje_v4');if(!raw)raw=localStorage.getItem('denikNadeje_v2');const data=raw?JSON.parse(raw):{};return {...structuredClone(defaultState),...data,profile:{...defaultState.profile,...(data.profile||{})},emergency:{...defaultState.emergency,...(data.emergency||{})},contacts:Array.isArray(data.contacts)?data.contacts:[],vitals:Array.isArray(data.vitals)?data.vitals:[]};}catch(e){return structuredClone(defaultState)}}
+const glucoseValue=byId('glucoseValue'), glucoseDate=byId('glucoseDate'), glucoseContext=byId('glucoseContext'), glucoseNote=byId('glucoseNote'), glucoseList=byId('glucoseList');
+function load(){try{let raw=localStorage.getItem(KEY);if(!raw)raw=localStorage.getItem('denikNadeje_v6');if(!raw)raw=localStorage.getItem('denikNadeje_v5');if(!raw)raw=localStorage.getItem('denikNadeje_v4');if(!raw)raw=localStorage.getItem('denikNadeje_v2');const data=raw?JSON.parse(raw):{};return {...structuredClone(defaultState),...data,profile:{...defaultState.profile,...(data.profile||{})},emergency:{...defaultState.emergency,...(data.emergency||{})},contacts:Array.isArray(data.contacts)?data.contacts:[],vitals:Array.isArray(data.vitals)?data.vitals:[]};}catch(e){return structuredClone(defaultState)}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));renderAll()}catch(e){toast('Úložiště zařízení je plné. Zkuste smazat starší přílohu nebo použít menší soubor.');console.error(e)}}
 function esc(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function fmtDate(s){if(!s)return '—';const d=new Date(s.length===10?s+'T12:00':s);return isNaN(d)?s:d.toLocaleString('cs-CZ',{day:'2-digit',month:'2-digit',year:'numeric',hour:s.includes('T')?'2-digit':undefined,minute:s.includes('T')?'2-digit':undefined})}
@@ -317,7 +366,7 @@ function renderAll(){
  const latest=[...state.entries].sort((a,b)=>b.date.localeCompare(a.date))[0];
  document.querySelector('#statPain').textContent=latest?latest.pain+'/10':'–';document.querySelector('#statFatigue').textContent=latest?latest.fatigue+'/10':'–';document.querySelector('#statMood').textContent=latest?latest.mood+'/10':'–';
  const fut=[...state.appointments].filter(a=>new Date(a.date)>=new Date()).sort((a,b)=>a.date.localeCompare(b.date));document.querySelector('#statNext').textContent=fut[0]?new Date(fut[0].date).toLocaleDateString('cs-CZ',{day:'numeric',month:'numeric'}):'–';
- renderEntries();renderAppointments();renderMeds();renderResults();renderQuestions();renderContacts();renderVitals();renderEmergency();renderChart(Number(document.querySelector('#chartTabs .tab.active')?.dataset.days||7));
+ renderEntries();renderAppointments();renderMeds();renderResults();renderQuestions();renderContacts();renderVitals();renderGlucose();renderEmergency();renderChart(Number(document.querySelector('#chartTabs .tab.active')?.dataset.days||7));
  document.querySelector('#upcomingCount').textContent=fut.length+' '+(fut.length===1?'termín':(fut.length>1&&fut.length<5?'termíny':'termínů'));
  document.querySelector('#homeUpcoming').innerHTML=fut.slice(0,3).map(a=>`<div class="item"><div class="itemTop"><div><h4>${esc(a.type)}</h4><div class="meta">${fmtDate(a.date)}${a.place?' · '+esc(a.place):''}</div>${a.note?'<p>'+esc(a.note)+'</p>':''}</div><span class="pill">${daysUntil(a.date)}</span></div></div>`).join('')||'<div class="empty">Zatím nemáte uložený žádný nadcházející termín.</div>';
 }
@@ -325,7 +374,7 @@ function daysUntil(s){const a=new Date();a.setHours(0,0,0,0);const b=new Date(s)
 function setSwitch(id,on){document.querySelector('#'+id).classList.toggle('on',on)}
 
 ['pain','fatigue','nausea','mood','appetite','sleep'].forEach(id=>document.querySelector('#'+id).addEventListener('input',e=>document.querySelector('#'+id+'Val').textContent=e.target.value));
-document.querySelector('#entryDate').value=today();document.querySelector('#resultDate').value=today();if(vitalDate)vitalDate.value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+document.querySelector('#entryDate').value=today();document.querySelector('#resultDate').value=today();if(vitalDate)vitalDate.value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);if(glucoseDate)glucoseDate.value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
 
 document.querySelector('#entryPhoto').addEventListener('change',async e=>{const f=e.target.files[0];if(!f){pendingPhoto='';return}if(f.size>6*1024*1024){toast('Fotka je příliš velká.');e.target.value='';return}pendingPhoto=await compressImage(f);document.querySelector('#photoInfo').textContent='Fotka připravena k uložení.'});
 function compressImage(file){return new Promise((resolve,reject)=>{const img=new Image(),r=new FileReader();r.onload=()=>img.src=r.result;r.onerror=reject;img.onload=()=>{const max=1100,scale=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement('canvas');c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);c.getContext('2d').drawImage(img,0,0,c.width,c.height);resolve(c.toDataURL('image/jpeg',.72))};r.readAsDataURL(file)})}
@@ -424,6 +473,40 @@ function renderVitals(){
   }).join('')||'<div class="empty">Zatím nemáte uložené žádné měření.</div>';
 }
 byId('healthConnectBtn').onclick=()=>{alert('V hotové Android verzi může Deník naděje přes Health Connect načítat podporované údaje, například tep, krevní tlak, SpO₂, váhu, kroky, spánek a tělesnou teplotu. Glykémie se může načítat jen tehdy, pokud ji konkrétní zařízení nebo zdravotní aplikace do Health Connect zapisuje a uživatel udělí příslušné oprávnění. Tento webový prototyp k Health Connect přístup nemá.');};
+
+
+// Samostatná sekce glykémie. Používá stejné lokální zdravotní záznamy, takže starší hodnoty glykémie zůstávají zachované.
+function glucoseRecords(days){
+  const all=(state.vitals||[]).filter(v=>v.glucose!==''&&v.glucose!=null&&Number.isFinite(Number(v.glucose))).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  if(!days)return all;
+  const cutoff=new Date();cutoff.setHours(0,0,0,0);cutoff.setDate(cutoff.getDate()-days+1);
+  return all.filter(v=>new Date(v.date)>=cutoff);
+}
+byId('openGlucose').onclick=()=>showView('glucose');
+byId('backFromGlucose').onclick=()=>showView('home');
+byId('saveGlucose').onclick=()=>{
+  const val=Number(glucoseValue.value);
+  if(!glucoseValue.value||!Number.isFinite(val)||val<0.5||val>50){toast('Zadejte platnou glykémii.');return}
+  state.vitals.push({id:uid(),date:glucoseDate.value||new Date().toISOString(),pulse:'',sys:'',dia:'',spo2:'',bodyTemp:'',glucose:val,weight:'',steps:'',sleepHours:'',glucoseContext:glucoseContext.value||'',glucoseNote:glucoseNote.value.trim(),source:'manual'});
+  glucoseValue.value='';glucoseContext.value='';glucoseNote.value='';glucoseDate.value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);save();toast('Glykémie uložena.');
+};
+function renderGlucose(){
+  const all=glucoseRecords(0).sort((a,b)=>String(b.date).localeCompare(String(a.date)));
+  if(byId('glucoseCount'))byId('glucoseCount').textContent=all.length+' '+(all.length===1?'měření':'měření');
+  if(glucoseList)glucoseList.innerHTML=all.slice(0,50).map(v=>`<div class="item"><div class="itemTop"><div><h4>${esc(v.glucose)} mmol/l</h4><div class="meta">${fmtDate(v.date)}${v.glucoseContext?' · '+esc(v.glucoseContext):''}</div>${v.glucoseNote?'<p>'+esc(v.glucoseNote)+'</p>':''}</div><span class="pill">${v.source==='sensor'?'senzor':'ručně'}</span></div><div class="itemActions"><button class="tiny" onclick="window.deleteItem('vitals','${v.id}')">Smazat</button></div></div>`).join('')||'<div class="empty">Zatím není uložená žádná glykémie.</div>';
+  const days=Number(byId('glucoseTabs')?.querySelector('.tab.active')?.dataset.days||1);renderGlucoseChart(days);
+}
+function renderGlucoseChart(days){
+  const canvas=byId('glucoseChart');if(!canvas)return;const ctx=canvas.getContext('2d'),dpr=window.devicePixelRatio||1,w=canvas.clientWidth||650,h=canvas.clientHeight||200;canvas.width=w*dpr;canvas.height=h*dpr;ctx.scale(dpr,dpr);ctx.clearRect(0,0,w,h);
+  const data=glucoseRecords(days);const nums=data.map(v=>Number(v.glucose)).filter(Number.isFinite);
+  byId('glucoseLatest').textContent=nums.length?nums[nums.length-1].toFixed(1):'–';byId('glucoseAverage').textContent=nums.length?(nums.reduce((a,b)=>a+b,0)/nums.length).toFixed(1):'–';byId('glucoseMin').textContent=nums.length?Math.min(...nums).toFixed(1):'–';byId('glucoseMax').textContent=nums.length?Math.max(...nums).toFixed(1):'–';
+  ctx.font='12px '+getComputedStyle(document.body).fontFamily;ctx.fillStyle='#6e7f86';if(!data.length){ctx.fillText('Zatím nejsou data pro toto období.',16,28);return}
+  const minV=Math.max(0,Math.floor(Math.min(...nums)-1)),maxV=Math.ceil(Math.max(...nums)+1),range=Math.max(2,maxV-minV),pad={l:38,r:10,t:15,b:30};
+  for(let i=0;i<=4;i++){const val=minV+range*i/4,y=h-pad.b-(val-minV)/range*(h-pad.t-pad.b);ctx.strokeStyle='rgba(35,50,58,.08)';ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(w-pad.r,y);ctx.stroke();ctx.fillStyle='#6e7f86';ctx.fillText(val.toFixed(1),3,y+4)}
+  const times=data.map(v=>new Date(v.date).getTime()),t0=Math.min(...times),t1=Math.max(...times),span=Math.max(1,t1-t0);ctx.strokeStyle='#159e9b';ctx.lineWidth=2.6;ctx.beginPath();data.forEach((v,i)=>{const x=pad.l+(data.length===1?.5:(times[i]-t0)/span)*(w-pad.l-pad.r),y=h-pad.b-(Number(v.glucose)-minV)/range*(h-pad.t-pad.b);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke();data.forEach((v,i)=>{const x=pad.l+(data.length===1?.5:(times[i]-t0)/span)*(w-pad.l-pad.r),y=h-pad.b-(Number(v.glucose)-minV)/range*(h-pad.t-pad.b);ctx.fillStyle='#159e9b';ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);ctx.fill()});
+  ctx.fillStyle='#6e7f86';ctx.fillText(fmtDate(data[0].date),pad.l,h-7);ctx.textAlign='right';ctx.fillText(fmtDate(data[data.length-1].date),w-pad.r,h-7);ctx.textAlign='left';
+}
+byId('glucoseTabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{byId('glucoseTabs').querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');renderGlucoseChart(Number(b.dataset.days))});
 
 function makeSummary(days,detail){const list=entriesIn(days),from=new Date();from.setDate(from.getDate()-days+1);const lines=[];lines.push(`SOUHRN ZA POSLEDNÍCH ${days} DNÍ`);lines.push(`Vytvořeno: ${new Date().toLocaleString('cs-CZ')}`);if(!list.length)lines.push('\nZa toto období nejsou uložené denní zápisy.');else{const ap=avg(list,'pain'),af=avg(list,'fatigue'),an=avg(list,'nausea'),am=avg(list,'mood');const maxPain=Math.max(...list.map(e=>e.pain));const temps=list.map(e=>parseFloat(String(e.temperature).replace(',','.'))).filter(Number.isFinite);lines.push(`\nZápisy: ${list.length}`);lines.push(`Průměrná bolest: ${ap.toFixed(1)}/10 (maximum ${maxPain}/10)`);lines.push(`Průměrná únava: ${af.toFixed(1)}/10`);lines.push(`Průměrná nevolnost: ${an.toFixed(1)}/10`);lines.push(`Průměrná nálada: ${am.toFixed(1)}/10`);if(temps.length)lines.push(`Teplota: zaznamenané rozmezí ${Math.min(...temps).toFixed(1)}–${Math.max(...temps).toFixed(1)} °C`);if(detail==='detail'){const notes=list.filter(e=>e.note).slice(-8);if(notes.length){lines.push('\nPoznámky:');notes.forEach(e=>lines.push(`• ${fmtDate(e.date)}: ${e.note}`))}const wins=list.filter(e=>e.win);if(wins.length){lines.push('\nMalé výhry:');wins.slice(-5).forEach(e=>lines.push(`• ${e.win}`))}}}
  const fut=state.appointments.filter(a=>new Date(a.date)>=new Date()).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,4);if(fut.length){lines.push('\nNadcházející termíny:');fut.forEach(a=>lines.push(`• ${fmtDate(a.date)} – ${a.type}${a.place?' ('+a.place+')':''}`))}
@@ -528,7 +611,7 @@ customRelaxAudio.addEventListener('play',()=>stopRelaxation(true));
 removeCustomRelax.addEventListener('click',async()=>{clearCustomRelaxUi();try{await dbDeleteCustom()}catch(e){}toast('Vlastní relaxace byla odstraněna.')});
 (async()=>{try{const saved=await dbGetCustom();if(saved&&saved.blob)showCustomRelax(saved.blob,saved.name)}catch(e){}})();
 
-function showView(name){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelector('#view-'+name).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===name));if(name==='diary')setTimeout(()=>renderChart(+document.querySelector('#chartTabs .tab.active').dataset.days),30);window.scrollTo({top:0,behavior:'smooth'})}
+function showView(name){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelector('#view-'+name).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===name));if(name==='diary')setTimeout(()=>renderChart(+document.querySelector('#chartTabs .tab.active').dataset.days),30);if(name==='glucose')setTimeout(()=>renderGlucose(),30);window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('.navbtn').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 function tabGroup(selector,panPrefix,dataKey){document.querySelectorAll(selector+' .tab').forEach(b=>b.onclick=()=>{document.querySelectorAll(selector+' .tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const val=b.dataset[dataKey];document.querySelectorAll('.'+(panPrefix==='panel-'?'treatPanel':'docPanel')).forEach(p=>p.style.display='none');document.querySelector('#'+panPrefix+val).style.display='block'})}
 tabGroup('#treatTabs','panel-','panel');tabGroup('#doctorTabs','doc-','docpanel');
