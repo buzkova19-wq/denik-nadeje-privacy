@@ -64,6 +64,8 @@ input[type=text],input[type=number],input[type=date],input[type=time],input[type
 .customAudioBox{margin-top:12px;padding:14px;border:1px dashed rgba(21,158,155,.28);border-radius:18px;background:linear-gradient(145deg,rgba(223,247,241,.58),rgba(235,228,255,.48))}.customAudioBox audio{width:100%;margin-top:10px;accent-color:var(--turq)}.customFileName{font-weight:900;color:#247a75;overflow-wrap:anywhere}.sourceNote{font-size:.72rem;color:var(--muted);line-height:1.45;margin-top:12px}.sourceNote a{text-decoration:underline;text-underline-offset:2px}
 </style>
 <!-- iOS/PWA build v1 -->
+  <!-- Anonymní statistiky návštěv: GoatCounter. Neposílají se zdravotní údaje ani obsah deníku. -->
+  <script data-goatcounter="https://deniknadeje.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 <div class="app">
@@ -624,6 +626,27 @@ document.querySelector('#togglePremium').onclick=()=>{state.premium=!state.premi
 setInterval(()=>{if(!('Notification' in window) || Notification.permission!=='granted')return;const hm=new Date().toTimeString().slice(0,5);state.meds.forEach(m=>{if(m.mode==='Pravidelně'&&m.times.split(',').map(x=>x.trim()).includes(hm)&&m.takenDate!==today()){const stamp='notify_'+m.id+'_'+today()+'_'+hm;if(!sessionStorage.getItem(stamp)){new Notification('Deník naděje',{body:`Čas na lék: ${m.name}${m.dose?' – '+m.dose:''}`});sessionStorage.setItem(stamp,'1')}}})},30000);
 
 if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+// Přibližné měření instalace PWA: první spuštění z ikony na ploše.
+// Do GoatCounteru se neposílají žádná zdravotní data ani obsah aplikace.
+(function trackPwaLaunch(){
+  const standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||window.navigator.standalone===true;
+  if(!standalone)return;
+  let tries=0;
+  const timer=setInterval(()=>{
+    tries++;
+    if(window.goatcounter&&typeof window.goatcounter.count==='function'){
+      clearInterval(timer);
+      window.goatcounter.count({path:'pwa-standalone-launch',title:'Spuštění aplikace z plochy',event:true});
+      try{
+        if(!localStorage.getItem('dn_gc_first_pwa_launch')){
+          window.goatcounter.count({path:'pwa-first-home-screen-launch',title:'První spuštění z plochy – přibližná instalace',event:true,no_session:true});
+          localStorage.setItem('dn_gc_first_pwa_launch','1');
+        }
+      }catch(e){}
+    }else if(tries>=50){clearInterval(timer)}
+  },100);
+})();
 renderAll();
 })();
 </script>

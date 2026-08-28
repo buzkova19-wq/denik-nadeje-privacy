@@ -1,4 +1,4 @@
-const CACHE = 'denik-nadeje-ios-pwa-v2';
+const CACHE = 'denik-nadeje-ios-pwa-v3-statistiky';
 const CORE = ['./', './index.html', './manifest.json', './icon.png', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {
