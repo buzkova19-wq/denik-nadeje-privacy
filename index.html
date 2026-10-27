@@ -17,7 +17,7 @@
 <body>
 <main>
   <h1>Zásady ochrany soukromí – Můj deník</h1>
-  <p class="muted">Aktualizováno: 14. října 2026</p>
+  <p class="muted">Aktualizováno: 27. října 2026</p>
   <div class="card">
     <p><strong>Můj deník</strong> je mobilní aplikace pro osobní sledování zdravotního stavu, příznaků a léčby. Provozovatelkou a vývojářkou aplikace je <strong>Kateřina Ranglová</strong>. Pro dotazy k ochraně soukromí je určen e-mail <a href="mailto:buzkova19@gmail.com">buzkova19@gmail.com</a>.</p>
     <p><strong>Důležité rozlišení:</strong> Zdravotní záznamy, které uživatel zadává nebo načítá do deníku, jsou v aplikaci ukládány lokálně. Bezplatná verze zároveň používá reklamní technologii Google AdMob, která může samostatně zpracovávat technické údaje a identifikátory zařízení. Nejde tedy o aplikaci zcela bez zpracování údajů třetími stranami.</p>
@@ -43,7 +43,9 @@
   <p>Načtené dostupné hodnoty se používají k doplnění osobních přehledů v deníku a ukládají se do lokálních zdravotních záznamů aplikace. Aplikace používá pro tuto funkci oprávnění ke <strong>čtení</strong>; účelem není předávat načtené zdravotní údaje inzerentům. Dostupnost hodnot závisí na tom, zda je jiné zařízení nebo aplikace do Health Connect zaznamenává.</p>
   <p>Uživatel může oprávnění kdykoli odebrat v nastavení telefonu v části Health Connect → Oprávnění aplikací. Odebrání oprávnění samo o sobě neodstraní hodnoty, které již byly do deníku načteny; ty je nutné vymazat také v samotné aplikaci nebo odstraněním jejích lokálních dat.</p>
 
-  <h2>4. Reklamy Google AdMob a technické údaje</h2>
+  <h2>4. Hlasové diktování v sekci Klouby</h2>
+  <p>V modulu Klouby a revmatologie lze u jednotlivých otázek a kloubů dobrovolně použít systémové rozpoznávání řeči Androidu. Rozpoznávání obstarává služba dostupná v telefonu, například služba zvolená uživatelem či výrobcem zařízení. Podle poskytovatele a nastavení může být zvuk nebo přepis pro účely rozpoznání přenášen mimo telefon, včetně přenosu přes internet. Poskytovatel této služby může zpracovávat zvuk a související technické údaje podle vlastních zásad. Aplikace neprovozuje vlastní službu rozpoznávání řeči a běžně neukládá původní zvukovou nahrávku; ukládá rozpoznaný text do lokálního zápisu. Diktování není povinné: veškeré otázky lze vyplnit ručně.</p>
+  <h2>5. Reklamy Google AdMob a technické údaje</h2>
   <p>Bezplatná verze aplikace používá reklamní systém <strong>Google AdMob (Google Mobile Ads SDK)</strong> a platformu <strong>Google User Messaging Platform (UMP)</strong> pro práci se souhlasy s reklamami tam, kde je to vyžadováno. Reklamní technologie Google mohou podle nastavení zařízení, regionu a voleb uživatele automaticky zpracovávat a předávat společnosti Google zejména:</p>
   <ul>
     <li>IP adresu, ze které lze odvodit přibližnou polohu,</li>
@@ -54,24 +56,25 @@
   <p>Účelem může být zobrazování reklam, měření jejich výkonu, analytika reklamních služeb a ochrana před podvody. Reklamní identifikátory a možnosti personalizace lze v příslušném rozsahu spravovat v nastavení telefonu a prostřednictvím voleb souhlasu, které reklamní systém zpřístupní. Použití reklamní služby neznamená, že provozovatelka dostává obsah uživatelových zdravotních záznamů.</p>
   <p>Další informace: <a href="https://policies.google.com/privacy">Zásady ochrany soukromí společnosti Google</a> a <a href="https://developers.google.com/admob/android/privacy/play-data-disclosure">Informace Googlu o údajích zpracovávaných Mobile Ads SDK</a>.</p>
 
-  <h2>5. Premium a platby přes Google Play</h2>
+  <h2>6. Premium a platby přes Google Play</h2>
   <p>Pokud uživatel zvolí placené Premium, nákup a správa předplatného probíhají prostřednictvím <strong>Google Play Billing</strong>. Google při tom podle svých pravidel zpracovává údaje související s účtem a nákupem. Aplikace pracuje s informací, zda má uživatel aktivní Premium, ale provozovatelka prostřednictvím aplikace nezískává údaje o platební kartě. Platby a předplatné lze spravovat v Google Play.</p>
 
-  <h2>6. Externí zvuky a internetové připojení</h2>
+  <h2>7. Externí zvuky a internetové připojení</h2>
   <p>Při využití některých volitelných relaxačních zvuků může aplikace načítat soubory z Wikimedia Commons. Při takovém spojení mohou být provozovatelem externí služby zpracovány běžné síťové údaje, například IP adresa. Viz <a href="https://foundation.wikimedia.org/wiki/Policy:Privacy_policy">zásady ochrany soukromí Wikimedia Foundation</a>.</p>
 
-  <h2>7. Uchování, odstranění a kopie dat</h2>
-  <p><strong>Systémové zálohy Androidu:</strong> Verze aplikace 1.0.56 (kód 61) má v instalačním balíčku povolené systémové zálohování (<code>allowBackup=true</code>). Podle nastavení zařízení, verze Androidu a zvolené zálohovací služby proto mohou být lokální údaje aplikace zahrnuty do zálohy zařízení mimo samotný telefon. To není totéž jako odesílání zdravotních záznamů provozovatelce aplikace. Nastavení systémového zálohování lze spravovat v telefonu.</p>
+  <h2>8. Uchování, odstranění a kopie dat</h2>
+  <p><strong>Systémové zálohy Androidu:</strong> Současná interně testovaná verze 1.0.78 (build 83) zakazuje automatické zálohování a přenos soukromých dat aplikace pomocí systémových záloh Androidu (<code>allowBackup=false</code> a související pravidla). Některé starší verze, například 1.0.56 (kód 61), systémové zálohy povolovaly; dříve vytvořené kopie mohou existovat podle nastavení telefonu nebo zálohovací služby. Vypnutí nových systémových záloh starší kopie automaticky nemaže.</p>
+  <p><strong>Ruční zálohy a exporty:</strong> Aplikace nabízí šifrovanou zálohu deníku včetně Kloubů (při použití této volby), která je chráněna uživatelským heslem. Současně některé funkce umožňují exportovat obsah do <strong>nešifrovaného JSON</strong> nebo přehledu PDF. Tyto soubory mohou obsahovat citlivé zdravotní informace a je nutné je uložit bezpečně. Pokud uživatel zvolí cloudové úložiště nebo soubor někomu odešle, další zpracování řídí zvolená služba nebo příjemce.</p>
   <p>Osobní zdravotní záznamy v deníku zůstávají v úložišti aplikace, dokud je uživatel nesmaže, nevymaže data aplikace nebo aplikaci neodinstaluje. V aplikaci lze mazat uložené záznamy; pro úplné odstranění lokálních dat lze použít systémové Nastavení Androidu → Aplikace → Můj deník → Úložiště → Vymazat data. Exportované zálohy a jiné samostatné soubory je potřeba odstranit v umístění, kam byly uloženy.</p>
   <p>Provozovatelka nemůže na dálku mazat záznamy uložené výhradně v telefonu uživatele. Údaje zpracovávané samostatně společností Google nebo jinými externími službami se řídí také zásadami a nastavením těchto služeb; smazání deníku z telefonu nemusí odstranit jejich již zpracované údaje.</p>
 
-  <h2>8. Zabezpečení a doporučení</h2>
+  <h2>9. Zabezpečení a doporučení</h2>
   <p>Uživatel by měl telefon chránit zámkem obrazovky, aktualizovat systém a pečlivě chránit exportované zdravotní soubory. Při jejich odesílání dalším osobám by měl použít vhodný bezpečný způsob sdílení. Přenos údajů reklamním SDK Google je podle informací Googlu šifrován při přenosu; toto tvrzení se nevztahuje na všechny možné externí služby ani na exporty provedené uživatelem.</p>
 
-  <h2>9. Zdravotní účel aplikace a děti</h2>
+  <h2>10. Zdravotní účel aplikace a děti</h2>
   <p>Můj deník slouží k evidenci a přehledu osobních informací. <strong>Není zdravotnickým prostředkem a neurčuje diagnózu ani nenahrazuje vyšetření, léčbu nebo doporučení zdravotnického pracovníka.</strong> Zdravotní obtíže a případné změny léčby je potřeba konzultovat s lékařem. Aplikace není určena primárně dětem.</p>
 
-  <h2>10. Dotazy a změny zásad</h2>
+  <h2>11. Dotazy a změny zásad</h2>
   <p>Máte-li dotazy ohledně toho, jak aplikace nakládá s údaji, kontaktujte <a href="mailto:buzkova19@gmail.com">buzkova19@gmail.com</a>. Zásady mohou být aktualizovány při změně funkcí, používaných služeb nebo právních požadavků. Aktuální datum změny je vždy uvedeno na začátku této stránky.</p>
 </main>
 </body>
